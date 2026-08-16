@@ -1,0 +1,214 @@
+/* General Formatting */
+.debugging {
+	display: flex;
+	flex-direction: row;
+}
+
+/*button {
+	background: none;
+	color: inherit;
+	border: none;
+	padding: 0;
+	font: inherit;
+	cursor: pointer;
+	outline: inherit;
+}*/
+
+body {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: #27384B;
+}
+
+h1 {
+	color: white;
+}
+
+footer {
+	color: white;
+}
+
+.sp_title {
+	text-align: center;
+}
+
+.sp_nav_divider {
+	display: flex;
+	flex-direction: row;
+}
+
+/* Main Container */
+.sp_main_container {
+display: flex;
+flex-direction: row;
+gap: 0.5rem;
+border-radius: 2rem;
+background-color: #110F21;
+}
+
+.sp_intro_container {
+	display: flex;
+	flex-direction: column;
+	margin: 1rem;
+	justify-content: center;
+	color: white;
+}
+
+/* Navigation */
+.sp_nav_container {
+	margin: 1rem;
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.sp_nav {
+	background-color: cyan;
+	text-align: right;
+}
+/* Main Card */
+.sp_card_main {
+	margin: 1rem;
+	align-self: center;
+}
+
+.sp_card_main_img {
+ width: 25rem;
+ animation: /*cardAnim 0.25s ease 0s 1 normal forwards*/;
+}
+
+ @keyframes cardAnim {
+	0% {
+		transform: scale(0);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+/* Description + Page Controller */
+.sp_desc_container {
+	display: flex;
+	flex-direction: column;
+	margin: 1rem;
+	gap: 5rem;
+	justify-content: center;
+	color: white;
+}
+
+.sp_info {
+		background-color: #27384B;
+		margin: 0.25rem;
+		width: 19rem;
+		height: 19rem;
+		color: white;
+}
+
+#CD_N, #CD_C {
+			white-space: normal;
+			word-wrap: break-word;
+			margin: 0.5rem;
+					margin-top: 1rem;
+}
+
+.sp_page_ctrl {
+		display: flex;
+		flex-direction: row;
+		background-color: #516e94;
+		justify-content: center;
+		align-items: center;
+		width: 19rem;
+		height: 4.27rem;
+}
+
+.sp_page_reverse {
+	transform: scale(-1, -1);
+}
+
+/* Card Select Grid */
+.sp_card_grid_container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin: 1rem;
+}
+.sp_card_grid_row {
+	display: flex;
+	flex-direction: row;
+	gap: 1rem;
+}
+
+.sp_card_select_img:hover {
+	filter: brightness(125%);
+}
+
+.sp_card_select_img:active {
+	filter: brightness(175%);
+}
+
+.sp_card_select:focus-visible {
+	outline: 2rem solid white;
+}
+
+.sp_card_select_img {
+width: 12.5rem;
+height: 15.75rem;
+}
+
+/* Category Tabs */
+.sp_category_container {
+	display: flex;
+	flex-direction: column;
+}
+
+.sp_category {
+	background-color: #47586C;
+	height: 5rem;
+	width: 4rem;
+}
+
+.sp_tab_c {
+	background-image: url("img/tab_icons/tab_c_00.png");
+	background-repeat: no-repeat;
+}
+
+.sp_tab_c:hover {
+	filter: brightness(125%);
+}
+
+.sp_tab_c:active {
+	filter: brightness(125%);
+}
+
+/*.sp_tab_c:focus {
+	background-image: url("img/tab_icons/tab_c_01.png");
+}*/
+
+.sp_tab_cr {
+	background-image: url("img/tab_icons/tab_cr_00.png");
+	background-repeat: no-repeat;
+}
+
+.sp_tab_cr:hover {
+	filter: brightness(125%);
+}
+
+.sp_tab_h {
+	background-image: url("img/tab_icons/tab_h_00.png");
+	background-repeat: no-repeat;
+}
+
+.sp_tab_h:hover {
+	filter: brightness(125%);
+}
+
+.sp_tab_s {
+	background-image: url("img/tab_icons/tab_s_00.png");
+	background-repeat: no-repeat;
+}
+
+.sp_tab_s:hover {
+	filter: brightness(125%);
+}

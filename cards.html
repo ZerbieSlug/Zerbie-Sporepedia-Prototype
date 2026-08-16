@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Bootstrap Style Link even tho I barely used it for this but somehow the layout is dependent on it now??? -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Base Style Link -->
+<link href="style.css" rel="stylesheet">
+<!-- Title --> <title>Sporepedia Prototype</title>
+</head>
+<body onload="bootup();tabUpdate()">
+<!-- Web Title --> <header class="sp_title"><h1>SPOREPEDIA</h1></header>
+<div class="sp_nav_divider">
+<!-- Navigation --> <nav class="sp_nav_container">
+<a class="sp_nav" href="index.html">Home</a>
+<a class="sp_nav" href="#">*Sporepedia</a>
+<a class="sp_nav" href="credits.html">Credits</a>
+<button onclick="play()">Music Player</button>
+<button onclick="pause()">Music Stopper</button>
+</nav>
+<main class="sp_main_container"> <!-- Everything here will be organized horizontally-->
+<!-- Main Card --><section class="sp_card_main">
+<img src="img/card_main/creatures/C_01.jpg" id="card_display" class="sp_card_main_img">
+</section>
+<!-- Description/Page --><section>
+<div class="sp_desc_container"> <!-- Make this section be sorted vertically-->
+<!-- Card Information --> <article class="sp_info">
+<h2 id="CD_N">Creature Name</h2>
+<p id="CD_C">Information</p>
+</article>
+<!-- Page Controller --> <div class="sp_page_ctrl">
+<div>
+<button id="page_l" onclick="pageLeft();selectUpdate()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
+</div>
+<div class="sp_page_ctrl">
+<p id="c_page">...</p>
+<p>/</p>
+<p id="m_page">...</p>
+</div>
+<div>
+<button id="page_r" onclick="pageRight();selectUpdate()"><img src="img/menu_arrow.png"></button>
+</div>
+</div>
+</div>
+</section>
+<!-- Card Selection Grid --><section class="sp_card_grid_container"> <!-- This container is vertical -->
+<div class="sp_card_grid_row"> <!-- Each row is horizontal -->
+<button class="sp_card_select" onclick="cardSelect(1);displayUpdate();displayAnim();descUpdate()"><img id="SC_01" src="img/card_select/creatures/C_01.jpg" class="sp_card_select_img" ></input>
+<button class="sp_card_select" onclick="cardSelect(2);displayUpdate();displayAnim();descUpdate()"><img  id="SC_02" src="img/card_select/creatures/C_02.jpg" class="sp_card_select_img"></button>
+<button class="sp_card_select"  onclick="cardSelect(3);displayUpdate();displayAnim();descUpdate()"><img id="SC_03" src="img/card_select/creatures/C_03.jpg" class="sp_card_select_img"></button>
+</div>
+<div class="sp_card_grid_row">
+<button class="sp_card_select" onclick="cardSelect(4);displayUpdate();displayAnim();descUpdate()"><img id="SC_04" src="img/card_select/creatures/C_04.jpg" class="sp_card_select_img"></button>
+<button class="sp_card_select" onclick="cardSelect(5);displayUpdate();displayAnim();descUpdate()"><img id="SC_05" src="img/card_select/creatures/C_05.jpg" class="sp_card_select_img"></button>
+<button class="sp_card_select"  onclick="cardSelect(6);displayUpdate();displayAnim();descUpdate()"><img id="SC_06" src="img/card_select/creatures/C_06.jpg" class="sp_card_select_img"></button>
+</div>
+<div class="sp_card_grid_row">
+<button class="sp_card_select" onclick="cardSelect(7);displayUpdate();displayAnim();descUpdate()"><img id="SC_07" src="img/card_select/creatures/C_07.jpg" class="sp_card_select_img"></button>
+<button class="sp_card_select" onclick="cardSelect(8);displayUpdate();displayAnim();descUpdate()"><img id="SC_08"  src="img/card_select/creatures/C_08.jpg" class="sp_card_select_img"></button>
+<button class="sp_card_select" onclick="cardSelect(9);displayUpdate();displayAnim();descUpdate()"><img  id="SC_09" src="img/card_select/creatures/C_09.jpg" class="sp_card_select_img"></button>
+</div>
+</section>
+</main>
+<!-- Category Tabs --><nav class="sp_category_container"> <!-- This section should be sorted vertically -->
+<!-- Cell tab --><button class="sp_category sp_tab_c" id="tab_cel" onclick="tabUpdate(1);selectUpdate()"></button>
+<!-- Creature tab --> <button class="sp_category sp_tab_cr" id="tab_cre" onclick="tabUpdate(2);selectUpdate()"></button>
+<!-- Building tab --> <button class="sp_category sp_tab_h" id="tab_hou" onclick="tabUpdate(3);selectUpdate()"></button>
+<!-- Ship tab --><button class="sp_category sp_tab_s" id="tab_spa" onclick="tabUpdate(4);selectUpdate()"></button>
+</nav>
+</div>
+</body>
+<!-- Footer -->
+<footer>
+<div class="debugging">
+<p>((DEBUGGING INFORMATION))</p><p>Card Selected:</p> <p id="db_S_C"></p> <p>| Card Display Value:</p> <p id="db_D"></p><p>Music Value:</p><p id="music-on"></p><p>Current Tab:</p><p id="db_tab"></p>
+</div>
+</footer>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Hey hackers, because it's a prototype, I wanted all the scripts to be contained in this .html file.
+When I begin converting it into something else, I'll be relocating this into the proper file.
+Also this code is powered by duct-tape and glue.
+It's meant to give out an idea before I start caring for stuff like stylization and whatnot-->
+<script>
+var db_audio_flg = document.getElementById("music-on");
+  var audio = new Audio('bg-music.mp3');
+function play() {
+  if (audio_flg == 0) {
+  audio.play();
+  audio_flg = 1;
+  db_audio_flg.textContent = audio_flg;
+  }
+}
+
+function pause() {
+if (audio_flg == 1) {
+audio.pause();
+audio.currentTime = 0;
+audio_flg = 0;
+db_audio_flg.textContent = audio_flg;
+}
+}
+</script>
+<script>
+var audio_flg;
+var db_S_C = document.getElementById("db_S_C"); //debug select indicator (source)
+var S_C; //select indicator
+var C_Page = document.getElementById("c_page"); //current page display (source)
+var C_Page_V; //adjustable page value
+var M_Page = document.getElementById("m_page"); //adjustable max page (source)
+var M_Page_V; //adjustable maximum page value
+var Page_R = document.getElementById("page_r");
+var Page_L = document.getElementById("page_l");
+var M_C = document.getElementById("card_display"); //Big Card Display (source)
+var M_C_A; //Big Card Animation Flag
+var Display; //Big Card Display Value
+var db_Display = document.getElementById("db_D"); //debug big card value
+var charName_Input = document.getElementById("CD_N"); //Name of Selected Creature (source)
+var charName; //Name of Selected Creature
+var charCredit_Input = document.getElementById("CD_C") //Creators of Selected Creature (source)
+var charCredit; //Creators of Selected Creature
+var S_01 = document.getElementById("SC_01"); //S_01 - S_09 correspond to the cards on the grid
+var S_02 = document.getElementById("SC_02");
+var S_03 = document.getElementById("SC_03");
+var S_04 = document.getElementById("SC_04");
+var S_05 = document.getElementById("SC_05");
+var S_06 = document.getElementById("SC_06");
+var S_07 = document.getElementById("SC_07");
+var S_08 = document.getElementById("SC_08");
+var S_09 = document.getElementById("SC_09");
+var S_V; // Value to help with changing the cards on the grid per page
+var T_Ce = document.getElementById("tab_cel"); // cell tab source
+var T_Cr = document.getElementById("tab_cre"); // creature tab source
+var T_Ho = document.getElementById("tab_hou"); // house tab source
+var T_Sp = document.getElementById("tab_spa"); // space tab source
+var T_State; //Current Tab Selected
+var db_T_State = document.getElementById("db_tab"); //Debug Tab Selection
+
+function bootup() {
+audio_flg = 0;
+S_C = 0;
+C_Page_V = "...";
+Display = 0;
+M_C.src = "img/card_main/debug-slug.png";
+M_C_A = 0;
+S_01.src = "";
+S_02.src = "";
+S_03.src = "";
+S_04.src = "";
+S_05.src = "";
+S_06.src = "";
+S_07.src = "";
+S_08.src = "";
+S_09.src = "";
+db_S_C.textContent = S_C;
+C_Page.textContent = C_Page_V;
+db_D.textContent = Display;
+S_V = 1;
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+T_State = 0;
+}
+
+function pageLeft() {
+C_Page_V = C_Page_V - 1;
+M_C.src = "img/card_main/debug-slug.png";
+S_C = 0;
+db_S_C.textContent = S_C;
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+if (C_Page_V == 0) {
+if (T_State == 1 || 3) { //Cell and Building have no pages to turn
+C_Page_V = 1;
+}
+if (T_State == 2) { //Creature loops back to page 3
+C_Page_V = 3;
+}
+if (T_State == 4) { //Space loops back to page 2
+C_Page_V = 2;
+}
+}
+C_Page.textContent = C_Page_V;
+}
+
+function pageRight() {
+C_Page_V = C_Page_V + 1;
+M_C.src = "img/card_main/debug-slug.png";
+S_C = 0;
+db_S_C.textContent = S_C;
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+if (T_State == 1) { //Cells only have 1 page of content
+if (C_Page_V == 2) {
+C_Page_V = 1;
+}
+}
+if (T_State == 2) { //Creatures only have 3 page of content
+if (C_Page_V == 4) {
+C_Page_V = 1;
+}
+}
+if (T_State == 3) { //Buildings only have 1 page of content
+if (C_Page_V == 2) {
+C_Page_V = 1;
+}
+}
+if (T_State == 4) { //Planets only have 2 page of content
+if (C_Page_V == 3) {
+C_Page_V = 1;
+}
+}
+C_Page.textContent = C_Page_V;
+}
+
+function tabUpdate(num) {
+C_Page_V = "...";
+C_Page.textContent = C_Page_V;
+M_C.src = "img/card_main/debug-slug.png";
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+if (num == '1') {
+C_Page_V = 1;
+C_Page.textContent = C_Page_V;
+M_C.src = "img/card_main/debug-slug.png";
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_01.png')"; // Cell is on, everything Off
+T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
+T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
+T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
+T_State = 1;
+db_T_State.textContent = T_State;
+M_Page_V = 1;
+M_Page.textContent = M_Page_V;
+}
+if (num == '2') {
+C_Page_V = 1;
+C_Page.textContent = C_Page_V;
+M_C.src = "img/card_main/debug-slug.png";
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_01.png')"; // Creature is on, everything Off
+T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
+T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
+T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
+T_State = 2;
+db_T_State.textContent = T_State;
+M_Page_V = 3;
+M_Page.textContent = M_Page_V;
+}
+if (num == '3') {
+C_Page_V = 1;
+C_Page.textContent = C_Page_V;
+M_C.src = "img/card_main/debug-slug.png";
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_01.png')"; // House is on, everything Off
+T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
+T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
+T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
+T_State = 3;
+db_T_State.textContent = T_State;
+M_Page_V = 1;
+M_Page.textContent = M_Page_V;
+}
+if (num == '4') {
+C_Page_V = 1;
+C_Page.textContent = C_Page_V;
+M_C.src = "img/card_main/debug-slug.png";
+charName_Input.textContent = "...";
+charCredit_Input.textContent = "...";
+T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_01.png')"; // Space is on, everything Off
+T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
+T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
+T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
+T_State = 4;
+db_T_State.textContent = T_State;
+M_Page_V = 2;
+M_Page.textContent = M_Page_V;
+}
+}
+
+function cardSelect(num) {
+if (num == '1') {
+S_C = 1;
+}
+if (num == '2') {
+S_C = 2;
+}
+if (num == '3') {
+S_C = 3;
+}
+if (num == '4') {
+S_C = 4;
+}
+if (num == '5') {
+S_C = 5;
+}
+if (num == '6') {
+S_C = 6;
+}
+if (num == '7') {
+S_C = 7;
+}
+if (num == '8') {
+S_C = 8;
+}
+if (num == '9') {
+S_C = 9;
+}
+db_S_C.textContent = S_C;
+}
+
+function displayAnim() { //Animation for big card
+if (M_C_A == 0) {
+M_C_A = 1;
+M_C.style.animation='cardAnim 0.25s ease 0s 1 normal forwards';
+setTimeout (displayAnimDis, 200);
+}
+}
+
+function displayAnimDis() {
+M_C.style.animation='';
+M_C_A = 0;
+}
+
+function displayUpdate(){
+Display = (C_Page_V * 9) - (9 - S_C);
+db_D.textContent = Display;
+if (T_State == '1') { //Cells Display Values + Images
+if (Display == '1') {
+M_C.src = "img/card_main/cells/Ce_01.jpg";
+}
+if (Display == '2') {
+M_C.src = "img/card_main/cells/Ce_02.jpg";
+}
+if (Display == '3') {
+M_C.src = "img/card_main/cells/Ce_03.jpg";
+}
+if (Display == '4') {
+M_C.src = "img/card_main/cells/Ce_04.jpg"
+}
+}
+if (T_State == '2') { // Creatures Display Values + Images
+if (Display == '1') {
+M_C.src = "img/card_main/creatures/C_01.jpg"
+}
+if (Display == '2') {
+M_C.src = "img/card_main/creatures/C_02.jpg"
+}
+if (Display == '3') {
+M_C.src = "img/card_main/creatures/C_03.jpg"
+}
+if (Display == '4') {
+M_C.src = "img/card_main/creatures/C_04.jpg"
+}
+if (Display == '5') {
+M_C.src = "img/card_main/creatures/C_05.jpg"
+}
+if (Display == '6') {
+M_C.src = "img/card_main/creatures/C_06.jpg"
+}
+if (Display == '7') {
+M_C.src = "img/card_main/creatures/C_07.jpg"
+}
+if (Display == '8') {
+M_C.src = "img/card_main/creatures/C_08.jpg"
+}
+if (Display == '9') {
+M_C.src = "img/card_main/creatures/C_09.jpg"
+}
+if (Display >= '10') {
+M_C.src = "img/card_main/creatures/C_" + Display + ".jpg"
+}
+}
+if (T_State == '3') { // Buildings Display Values + Images
+if (Display == '1') {
+M_C.src = "img/card_main/buildings/H_01.jpg"
+}
+if (Display == '2') {
+M_C.src = "img/card_main/buildings/H_02.jpg"
+}
+if (Display == '3') {
+M_C.src = "img/card_main/buildings/H_03.jpg"
+}
+if (Display == '4') {
+M_C.src = "img/card_main/buildings/H_04.jpg"
+}
+if (Display == '5') {
+M_C.src = "img/card_main/buildings/H_05.jpg"
+}
+}
+if (T_State == '4') { // Space Display Values + Images
+if (Display == '1') {
+M_C.src = "img/card_main/space/S_01.jpg"
+}
+if (Display == '2') {
+M_C.src = "img/card_main/space/S_02.jpg"
+}
+if (Display == '3') {
+M_C.src = "img/card_main/space/S_03.jpg"
+}
+if (Display == '4') {
+M_C.src = "img/card_main/space/S_04.jpg"
+}
+if (Display == '5') {
+M_C.src = "img/card_main/space/S_05.jpg"
+}
+if (Display == '6') {
+M_C.src = "img/card_main/space/S_06.jpg"
+}
+if (Display == '7') {
+M_C.src = "img/card_main/space/S_07.jpg"
+}
+if (Display == '8') {
+M_C.src = "img/card_main/space/S_08.jpg"
+}
+if (Display == '9') {
+M_C.src = "img/card_main/space/S_09.jpg"
+}
+if (Display >= '10' && Display <= '13') {
+M_C.src = "img/card_main/space/S_" + Display + ".jpg"
+}
+}
+}
+
+function descUpdate () {
+if (T_State == '1') { // Cell Descriptions
+if (Display <= 4) {
+charName_Input.innerHTML = "Nameless Cell";
+charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Cell should have the same name and description!" ;
+}
+}
+if (T_State == '2') { // Creature Descriptions
+if (Display == '1') {
+charName_Input.innerHTML = "Zerbie";
+charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "It's me!" ;
+}
+if (Display == '2') {
+charName_Input.innerHTML = "Waddlin";
+charCredit_Input.innerHTML = "Made by: Zerbie2" + "<br>" +  "Wanyo" ;
+}
+if (Display == '3') {
+charName_Input.innerHTML = "Void Terminator";
+charCredit_Input.innerHTML = "Made by: Zerbi3" + "<br>" + "HOUUUURRRRGHHH (This is a modded creation)" ;
+}
+if (Display == '4') {
+charName_Input.innerHTML = "Venerian Mud Sniffer";
+charCredit_Input.innerHTML = "Made by: Zerbie4" + "<br>" + "It dig on ground for tuber" ;
+}
+if (Display == '5') {
+charName_Input.innerHTML = "Vargingrate";
+charCredit_Input.innerHTML = "Made by: Zerbie5" + "<br>" + "I uh... I don't know what to do with this one.";
+}
+if (Display == '6') {
+charName_Input.innerHTML = "Tumortulus";
+charCredit_Input.innerHTML = "Made by: Zerbie6" + "<br>" + "Cancer if it had legs" ;
+}
+if (Display == '7') {
+charName_Input.innerHTML = "The Warder";
+charCredit_Input.innerHTML = "Made by: Zerbie7" + "<br>" + "Shut Up!!!" ;
+}
+if (Display == '8') {
+charName_Input.innerHTML = "Slaughterbear";
+charCredit_Input.innerHTML = "Made by: Zerbie8" + "<br>" + "It's not a bear, but it do slaughter!" ;
+}
+if (Display == '9') {
+charName_Input.innerHTML = "Seeker of Naughtiness";
+charCredit_Input.innerHTML = "Made by: Zerbie9" + "<br>" + "This is a modded creation. Also I'm gonna stop doing these descriptions!!!" ;
+}
+if (Display == '10') {
+charName_Input.innerHTML = "Roosteroid";
+charCredit_Input.innerHTML = "Made by: Zerbie10" ;
+}
+if (Display == '11') {
+charName_Input.innerHTML = "Qwexcnal";
+charCredit_Input.innerHTML = "Made by: Zerbie11" ;
+}
+if (Display == '12') {
+charName_Input.innerHTML = "Quartzhog";
+charCredit_Input.innerHTML = "Made by: Zerbie12" ;
+}
+if (Display == '13') {
+charName_Input.innerHTML = "QuakQuk";
+charCredit_Input.innerHTML = "Made by: Zerbie13" ;
+}
+if (Display == '14') {
+charName_Input.innerHTML = "The Qu";
+charCredit_Input.innerHTML = "Made by: Zerbie14" + "<br>" + "It's actually them oh my god RUN!!!" ;
+}
+if (Display == '15') {
+charName_Input.innerHTML = "OVERKILL9000";
+charCredit_Input.innerHTML = "Made by: Zerbie15" ;
+}
+if (Display == '16') {
+charName_Input.innerHTML = "Norgusborg";
+charCredit_Input.innerHTML = "Made by: Zerbie16" ;
+}
+if (Display == '17') {
+charName_Input.innerHTML = "The Warden";
+charCredit_Input.innerHTML = "Made by: Zerbie17" + "<br>" + "mods make it so much better" ;
+}
+if (Display == '18') {
+charName_Input.innerHTML = "MeatleBeetle";
+charCredit_Input.innerHTML = "Made by: Zerbie18" + "<br>" + "Ok now I'm gonna stop crediting Zerbie!" ;
+}
+if (Display == '19') {
+charName_Input.innerHTML = "Mattan";
+charCredit_Input.innerHTML = "JOHN MATTAN JOHN MATTAN JOHN MATTON" ;
+}
+if (Display == '20') {
+charName_Input.innerHTML = "Maniken";
+charCredit_Input.innerHTML = "When the poster is sus" ;
+}
+if (Display == '21') {
+charName_Input.innerHTML = "Kirblee";
+charCredit_Input.innerHTML = "Who the heck is this guy?" ;
+}
+if (Display == '22') {
+charName_Input.innerHTML = "King Dedebe";
+charCredit_Input.innerHTML = "Ruh" ;
+}
+if (Display == '23') {
+charName_Input.innerHTML = "Immature Fraudulator";
+charCredit_Input.innerHTML = "What lore does this fellow have? IDK I forgot!" ;
+}
+if (Display == '24') {
+charName_Input.innerHTML = "Gumblow";
+charCredit_Input.innerHTML = "eep" ;
+}
+if (Display == '25') {
+charName_Input.innerHTML = "GuardDrag";
+charCredit_Input.innerHTML = "So much DarkSpore parts dude!" ;
+}
+if (Display == '26') {
+charName_Input.innerHTML = "Graze Horse";
+charCredit_Input.innerHTML = "I'm still betting my money and carrots on the pink one" ;
+}
+if (Display == '27') {
+charName_Input.innerHTML = "Parastella Crystallis - Genwel Meteonelfilis";
+charCredit_Input.innerHTML = "Yes for just the low low price of $20 you can have SacredFaye's LEGALLIZED cosmic Elfilis as a bonus boss fight!!" ;
+}
+}
+if (T_State == '3') { // Building Descriptions
+if (Display <= 5) {
+charName_Input.innerHTML = "Nameless Building";
+charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Building should have the same name and description!" ;
+}
+}
+if (T_State == '4') {
+if (Display <= 13) {
+charName_Input.innerHTML = "Nameless Planet";
+charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Planet should have the same name and description!" ;
+}
+}
+}
+
+function selectUpdate () {
+if (C_Page_V == '1') {
+if (T_State == '1') {
+S_01.src = "img/card_select/cells/Ce_01.jpg";
+S_02.src = "img/card_select/cells/Ce_02.jpg";
+S_03.src = "img/card_select/cells/Ce_03.jpg";
+S_04.src = "img/card_select/cells/Ce_04.jpg";
+S_05.src = "";
+S_06.src = "";
+S_07.src = "";
+S_08.src = "";
+S_09.src = "";
+}
+if (T_State == '2') {
+S_01.src = "img/card_select/creatures/C_01.jpg";
+S_02.src = "img/card_select/creatures/C_02.jpg";
+S_03.src = "img/card_select/creatures/C_03.jpg";
+S_04.src = "img/card_select/creatures/C_04.jpg";
+S_05.src = "img/card_select/creatures/C_05.jpg";
+S_06.src = "img/card_select/creatures/C_06.jpg";
+S_07.src = "img/card_select/creatures/C_07.jpg";
+S_08.src = "img/card_select/creatures/C_08.jpg";
+S_09.src = "img/card_select/creatures/C_09.jpg";
+}
+if (T_State == '3') {
+S_01.src = "img/card_select/buildings/H_01.jpg";
+S_02.src = "img/card_select/buildings/H_02.jpg";
+S_03.src = "img/card_select/buildings/H_03.jpg";
+S_04.src = "img/card_select/buildings/H_04.jpg";
+S_05.src = "img/card_select/buildings/H_05.jpg";
+S_06.src = "";
+S_07.src = "";
+S_08.src = "";
+S_09.src = "";
+}
+if (T_State == '4') {
+S_01.src = "img/card_select/space/S_01.jpg";
+S_02.src = "img/card_select/space/S_02.jpg";
+S_03.src = "img/card_select/space/S_03.jpg";
+S_04.src = "img/card_select/space/S_04.jpg";
+S_05.src = "img/card_select/space/S_05.jpg";
+S_06.src = "img/card_select/space/S_06.jpg";
+S_07.src = "img/card_select/space/S_07.jpg";
+S_08.src = "img/card_select/space/S_08.jpg";
+S_09.src = "img/card_select/space/S_09.jpg";
+}
+}
+if (C_Page_V >= '2') {
+S_V = ((C_Page_V - 1) * 9);
+if (T_State == '2') {
+S_01.src = "img/card_select/creatures/C_" + (S_V + 1) + ".jpg";
+S_02.src = "img/card_select/creatures/C_" + (S_V + 2) + ".jpg";
+S_03.src = "img/card_select/creatures/C_" + (S_V + 3) + ".jpg";
+S_04.src = "img/card_select/creatures/C_" + (S_V + 4) + ".jpg";
+S_05.src = "img/card_select/creatures/C_" + (S_V + 5) + ".jpg";
+S_06.src = "img/card_select/creatures/C_" + (S_V + 6) + ".jpg";
+S_07.src = "img/card_select/creatures/C_" + (S_V + 7) + ".jpg";
+S_08.src = "img/card_select/creatures/C_" + (S_V + 8) + ".jpg";
+S_09.src = "img/card_select/creatures/C_" + (S_V + 9) + ".jpg";
+}
+if (T_State == '4') {
+S_01.src = "img/card_select/space/S_" + (S_V + 1) + ".jpg";
+S_02.src = "img/card_select/space/S_" + (S_V + 2) + ".jpg";
+S_03.src = "img/card_select/space/S_" + (S_V + 3) + ".jpg";
+S_04.src = "img/card_select/space/S_" + (S_V + 4) + ".jpg";
+S_05.src = "";
+S_06.src = "";
+S_07.src = "";
+S_08.src = "";
+S_09.src = "";
+}
+}
+}
+</script>
+</html>
