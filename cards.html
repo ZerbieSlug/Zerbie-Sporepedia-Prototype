@@ -8,7 +8,7 @@
 <link href="style.css" rel="stylesheet">
 <!-- Title --> <title>Sporepedia Prototype</title>
 </head>
-<body onload="bootup();tabUpdate()">
+<body onload="bootup();tabUpdate();selectUpdate()">
 <!-- Web Title --> <header class="sp_title"><h1>SPOREPEDIA</h1></header>
 <div class="sp_nav_divider">
 <!-- Navigation --> <nav class="sp_nav_container">
@@ -20,7 +20,7 @@
 </nav>
 <main class="sp_main_container"> <!-- Everything here will be organized horizontally-->
 <!-- Main Card --><section class="sp_card_main">
-<img src="img/card_main/creatures/C_01.jpg" id="card_display" class="sp_card_main_img" loading="lazy">
+<img src="" id="card_display" class="sp_card_main_img">
 </section>
 <!-- Description/Page --><section>
 <div class="sp_desc_container"> <!-- Make this section be sorted vertically-->
@@ -45,19 +45,19 @@
 </section>
 <!-- Card Selection Grid --><section class="sp_card_grid_container"> <!-- This container is vertical -->
 <div class="sp_card_grid_row"> <!-- Each row is horizontal -->
-<button class="sp_card_select" onclick="cardSelect(1);displayUpdate();displayAnim();descUpdate()"><img id="SC_01" src="img/card_select/creatures/C_01.jpg" class="sp_card_select_img" loading="lazy"></input>
-<button class="sp_card_select" onclick="cardSelect(2);displayUpdate();displayAnim();descUpdate()"><img  id="SC_02" src="img/card_select/creatures/C_02.jpg" class="sp_card_select_img" loading="lazy"></button>
-<button class="sp_card_select"  onclick="cardSelect(3);displayUpdate();displayAnim();descUpdate()"><img id="SC_03" src="img/card_select/creatures/C_03.jpg" class="sp_card_select_img" loading="lazy"></button>
+<button class="sp_card_select" onclick="cardSelect(1);displayUpdate();descUpdate()"><img id="SC_01" src="" class="sp_card_select_img" value="1" loading="lazy"></input>
+<button class="sp_card_select" onclick="cardSelect(2);displayUpdate();descUpdate()"><img  id="SC_02" src="" class="sp_card_select_img"  value="2" loading="lazy"></button>
+<button class="sp_card_select"  onclick="cardSelect(3);displayUpdate();descUpdate()"><img id="SC_03" src="" class="sp_card_select_img"  value="3" loading="lazy"></button>
 </div>
 <div class="sp_card_grid_row">
-<button class="sp_card_select" onclick="cardSelect(4);displayUpdate();displayAnim();descUpdate()"><img id="SC_04" src="img/card_select/creatures/C_04.jpg" class="sp_card_select_img" loading="lazy"></button>
-<button class="sp_card_select" onclick="cardSelect(5);displayUpdate();displayAnim();descUpdate()"><img id="SC_05" src="img/card_select/creatures/C_05.jpg" class="sp_card_select_img" loading="lazy"></button>
-<button class="sp_card_select"  onclick="cardSelect(6);displayUpdate();displayAnim();descUpdate()"><img id="SC_06" src="img/card_select/creatures/C_06.jpg" class="sp_card_select_img" loading="lazy"></button>
+<button class="sp_card_select" onclick="cardSelect(4);displayUpdate();descUpdate()"><img id="SC_04" src="" class="sp_card_select_img"  value="4" loading="lazy"></button>
+<button class="sp_card_select" onclick="cardSelect(5);displayUpdate();descUpdate()"><img id="SC_05" src="" class="sp_card_select_img"  value="5" loading="lazy"></button>
+<button class="sp_card_select"  onclick="cardSelect(6);displayUpdate();descUpdate()"><img id="SC_06" src="" class="sp_card_select_img"  value="6" loading="lazy"></button>
 </div>
 <div class="sp_card_grid_row">
-<button class="sp_card_select" onclick="cardSelect(7);displayUpdate();displayAnim();descUpdate()"><img id="SC_07" src="img/card_select/creatures/C_07.jpg" class="sp_card_select_img" loading="lazy"></button>
-<button class="sp_card_select" onclick="cardSelect(8);displayUpdate();displayAnim();descUpdate()"><img id="SC_08"  src="img/card_select/creatures/C_08.jpg" class="sp_card_select_img" loading="lazy"></button>
-<button class="sp_card_select" onclick="cardSelect(9);displayUpdate();displayAnim();descUpdate()"><img  id="SC_09" src="img/card_select/creatures/C_09.jpg" class="sp_card_select_img" loading="lazy"></button>
+<button class="sp_card_select" onclick="cardSelect(7);displayUpdate();descUpdate()"><img id="SC_07" src="" class="sp_card_select_img"  value="7" loading="lazy"></button>
+<button class="sp_card_select" onclick="cardSelect(8);displayUpdate();descUpdate()"><img id="SC_08"  src="" class="sp_card_select_img"  value="8" loading="lazy"></button>
+<button class="sp_card_select" onclick="cardSelect(9);displayUpdate();descUpdate()"><img  id="SC_09" src="" class="sp_card_select_img"  value="9" loading="lazy"></button>
 </div>
 </section>
 </main>
@@ -72,7 +72,7 @@
 <!-- Footer -->
 <footer>
 <div class="debugging">
-<p>((DEBUGGING INFORMATION))</p><p>Card Selected:</p> <p id="db_S_C"></p> <p>| Card Display Value:</p> <p id="db_D"></p><p>Music Value:</p><p id="music-on"></p><p>Current Tab:</p><p id="db_tab"></p>
+<p>((DEBUGGING INFORMATION))</p><p>Card Selected:</p> <p id="db_S_C"></p> <p>| Card Display Value:</p> <p id="db_D"></p><p>Music Value:</p><p id="music-on"></p><p>Current Tab:</p><p id="db_tab"></p><p>Filepath values</p><p id="db_cat_ass"></p>
 </div>
 </footer>
 </body>
@@ -102,40 +102,55 @@ db_audio_flg.textContent = audio_flg;
 }
 </script>
 <script>
+// [[Variables]]
+// (Audio)
 var audio_flg;
-var db_S_C = document.getElementById("db_S_C"); //debug select indicator (source)
-var S_C; //select indicator
-var C_Page = document.getElementById("c_page"); //current page display (source)
-var C_Page_V; //adjustable page value
-var M_Page = document.getElementById("m_page"); //adjustable max page (source)
-var M_Page_V; //adjustable maximum page value
-var Page_R = document.getElementById("page_r");
-var Page_L = document.getElementById("page_l");
+
+// (Main Card)
 var M_C = document.getElementById("card_display"); //Big Card Display (source)
-var M_C_A; //Big Card Animation Flag
 var Display; //Big Card Display Value
-var db_Display = document.getElementById("db_D"); //debug big card value
+
+// (Card Information)
 var charName_Input = document.getElementById("CD_N"); //Name of Selected Creature (source)
 var charName; //Name of Selected Creature
 var charCredit_Input = document.getElementById("CD_C") //Creators of Selected Creature (source)
 var charCredit; //Creators of Selected Creature
-var S_01 = document.getElementById("SC_01"); //S_01 - S_09 correspond to the cards on the grid
-var S_02 = document.getElementById("SC_02");
-var S_03 = document.getElementById("SC_03");
-var S_04 = document.getElementById("SC_04");
-var S_05 = document.getElementById("SC_05");
-var S_06 = document.getElementById("SC_06");
-var S_07 = document.getElementById("SC_07");
-var S_08 = document.getElementById("SC_08");
-var S_09 = document.getElementById("SC_09");
-var S_V; // Value to help with changing the cards on the grid per page
+
+// (Pages)
+var C_Page = document.getElementById("c_page"); //current page display (source)
+var C_Page_V; //adjustable page value
+var Page_R = document.getElementById("page_r"); //useless id
+var Page_L = document.getElementById("page_l"); //useless id
+var M_Page = document.getElementById("m_page"); //adjustable max page (source)
+var M_Page_V; //adjustable maximum page value
+
+//(Card Selectors)
+var S_C; //select indicator
+var S_Ca = document.getElementsByClassName("sp_card_select_img"); //EXPERIMENTAL - Card Arrays
+var S_Cb = document.getElementsByClassName ("sp_card_select"); //Card Array Buttons 
+
+// (Card Source Assemblers for Main and Selection Cards)
+var C_B; //Card Basis - Main or Select?
+var C_T; //Card Tab - Tab Folder Name
+var C_N; //Card Name - Image Acronym
+var C_I; //Card Identity - Image Numeral.
+var x; //Card Array variable
+
+// (Tabs)
 var T_Ce = document.getElementById("tab_cel"); // cell tab source
 var T_Cr = document.getElementById("tab_cre"); // creature tab source
 var T_Ho = document.getElementById("tab_hou"); // house tab source
 var T_Sp = document.getElementById("tab_spa"); // space tab source
 var T_State; //Current Tab Selected
-var db_T_State = document.getElementById("db_tab"); //Debug Tab Selection
 
+// (Debug)
+var db_S_C = document.getElementById("db_S_C"); //debug select indicator (source)
+var db_Display = document.getElementById("db_D"); //debug big card value
+var db_T_State = document.getElementById("db_tab"); //Debug Tab Selection
+var db_Cat_Assemble = document.getElementById("db_cat_ass"); // Debug filepath assembler
+
+//[[Scripts]]
+// (On-load)
 function bootup() {
 audio_flg = 0;
 S_C = 0;
@@ -143,24 +158,20 @@ C_Page_V = "...";
 Display = 0;
 M_C.src = "img/card_main/debug-slug.png";
 M_C_A = 0;
-S_01.src = "";
-S_02.src = "";
-S_03.src = "";
-S_04.src = "";
-S_05.src = "";
-S_06.src = "";
-S_07.src = "";
-S_08.src = "";
-S_09.src = "";
+C_B = 0;
+C_T = 0;
+C_N = 0;
+C_I = 0;
 db_S_C.textContent = S_C;
 C_Page.textContent = C_Page_V;
 db_D.textContent = Display;
-S_V = 1;
 charName_Input.textContent = "...";
 charCredit_Input.textContent = "...";
 T_State = 0;
 }
 
+// ((Page Scripts)
+// (Page Previous)
 function pageLeft() {
 C_Page_V = C_Page_V - 1;
 M_C.src = "img/card_main/debug-slug.png";
@@ -182,6 +193,7 @@ C_Page_V = 2;
 C_Page.textContent = C_Page_V;
 }
 
+// (Page Next)
 function pageRight() {
 C_Page_V = C_Page_V + 1;
 M_C.src = "img/card_main/debug-slug.png";
@@ -212,13 +224,14 @@ C_Page_V = 1;
 C_Page.textContent = C_Page_V;
 }
 
+// ((Tab-Icon script))
 function tabUpdate(num) {
 C_Page_V = "...";
 C_Page.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
 charName_Input.textContent = "...";
 charCredit_Input.textContent = "...";
-if (num == '1') {
+if (num == '1') { //Cell Icon Anim + Page Reset + Tab State 
 C_Page_V = 1;
 C_Page.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
@@ -229,11 +242,14 @@ T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
 T_State = 1;
+C_T = "cells"; //Update Card Assembler Category
+C_N = "Ce_"; //Filename
 db_T_State.textContent = T_State;
+db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
 M_Page_V = 1;
 M_Page.textContent = M_Page_V;
 }
-if (num == '2') {
+if (num == '2') { //Creature Icon Anim + Page Reset + Tab State 
 C_Page_V = 1;
 C_Page.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
@@ -244,11 +260,14 @@ T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
 T_State = 2;
+C_T = "creatures"; //Update Card Assembler Category
+C_N = "C_"; //Filename
 db_T_State.textContent = T_State;
+db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
 M_Page_V = 3;
 M_Page.textContent = M_Page_V;
 }
-if (num == '3') {
+if (num == '3') { //Creature Icon Anim + Page Reset + Tab State 
 C_Page_V = 1;
 C_Page.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
@@ -259,11 +278,14 @@ T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
 T_State = 3;
+C_T = "buildings"; //Update Card Assembler Category
+C_N = "H_"; //Filename
 db_T_State.textContent = T_State;
+db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
 M_Page_V = 1;
 M_Page.textContent = M_Page_V;
 }
-if (num == '4') {
+if (num == '4') { //Space Icon Anim + Page Reset + Tab State 
 C_Page_V = 1;
 C_Page.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
@@ -274,12 +296,16 @@ T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
 T_State = 4;
+C_T = "space"; //Update Card Assembler Category
+C_N = "S_"; //Filename
 db_T_State.textContent = T_State;
+db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
 M_Page_V = 2;
 M_Page.textContent = M_Page_V;
 }
 }
 
+// ((Card Selection Value Script))
 function cardSelect(num) {
 if (num == '1') {
 S_C = 1;
@@ -309,121 +335,22 @@ if (num == '9') {
 S_C = 9;
 }
 db_S_C.textContent = S_C;
+db_Cat_Assemble.textContent = C_T + C_N + C_I;
 }
 
-function displayAnim() { //Animation for big card
-if (M_C_A == 0) {
-M_C_A = 1;
-M_C.style.animation='cardAnim 0.25s ease 0s 1 normal forwards';
-setTimeout (displayAnimDis, 200);
-}
-}
-
-function displayAnimDis() {
-M_C.style.animation='';
-M_C_A = 0;
-}
-
+// (Display Update)
 function displayUpdate(){
+if (C_Page_V == 1) {
+Display = (C_I + S_C);
+M_C.src = "img/card_main/" + C_T + "/" + C_N + "0" + Display + ".jpg";
+} else {
 Display = (C_Page_V * 9) - (9 - S_C);
+M_C.src = "img/card_select/" + C_T + "/" + C_N + (Display) + ".jpg";
+}
 db_D.textContent = Display;
-if (T_State == '1') { //Cells Display Values + Images
-if (Display == '1') {
-M_C.src = "img/card_main/cells/Ce_01.jpg";
-}
-if (Display == '2') {
-M_C.src = "img/card_main/cells/Ce_02.jpg";
-}
-if (Display == '3') {
-M_C.src = "img/card_main/cells/Ce_03.jpg";
-}
-if (Display == '4') {
-M_C.src = "img/card_main/cells/Ce_04.jpg"
-}
-}
-if (T_State == '2') { // Creatures Display Values + Images
-if (Display == '1') {
-M_C.src = "img/card_main/creatures/C_01.jpg"
-}
-if (Display == '2') {
-M_C.src = "img/card_main/creatures/C_02.jpg"
-}
-if (Display == '3') {
-M_C.src = "img/card_main/creatures/C_03.jpg"
-}
-if (Display == '4') {
-M_C.src = "img/card_main/creatures/C_04.jpg"
-}
-if (Display == '5') {
-M_C.src = "img/card_main/creatures/C_05.jpg"
-}
-if (Display == '6') {
-M_C.src = "img/card_main/creatures/C_06.jpg"
-}
-if (Display == '7') {
-M_C.src = "img/card_main/creatures/C_07.jpg"
-}
-if (Display == '8') {
-M_C.src = "img/card_main/creatures/C_08.jpg"
-}
-if (Display == '9') {
-M_C.src = "img/card_main/creatures/C_09.jpg"
-}
-if (Display >= '10') {
-M_C.src = "img/card_main/creatures/C_" + Display + ".jpg"
-}
-}
-if (T_State == '3') { // Buildings Display Values + Images
-if (Display == '1') {
-M_C.src = "img/card_main/buildings/H_01.jpg"
-}
-if (Display == '2') {
-M_C.src = "img/card_main/buildings/H_02.jpg"
-}
-if (Display == '3') {
-M_C.src = "img/card_main/buildings/H_03.jpg"
-}
-if (Display == '4') {
-M_C.src = "img/card_main/buildings/H_04.jpg"
-}
-if (Display == '5') {
-M_C.src = "img/card_main/buildings/H_05.jpg"
-}
-}
-if (T_State == '4') { // Space Display Values + Images
-if (Display == '1') {
-M_C.src = "img/card_main/space/S_01.jpg"
-}
-if (Display == '2') {
-M_C.src = "img/card_main/space/S_02.jpg"
-}
-if (Display == '3') {
-M_C.src = "img/card_main/space/S_03.jpg"
-}
-if (Display == '4') {
-M_C.src = "img/card_main/space/S_04.jpg"
-}
-if (Display == '5') {
-M_C.src = "img/card_main/space/S_05.jpg"
-}
-if (Display == '6') {
-M_C.src = "img/card_main/space/S_06.jpg"
-}
-if (Display == '7') {
-M_C.src = "img/card_main/space/S_07.jpg"
-}
-if (Display == '8') {
-M_C.src = "img/card_main/space/S_08.jpg"
-}
-if (Display == '9') {
-M_C.src = "img/card_main/space/S_09.jpg"
-}
-if (Display >= '10' && Display <= '13') {
-M_C.src = "img/card_main/space/S_" + Display + ".jpg"
-}
-}
 }
 
+// ((Description Update Script))
 function descUpdate () {
 if (T_State == '1') { // Cell Descriptions
 if (Display <= 4) {
@@ -555,76 +482,69 @@ charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Planet should h
 }
 }
 
+// ((Select Icon Updates))
 function selectUpdate () {
-if (C_Page_V == '1') {
-if (T_State == '1') {
-S_01.src = "img/card_select/cells/Ce_01.jpg";
-S_02.src = "img/card_select/cells/Ce_02.jpg";
-S_03.src = "img/card_select/cells/Ce_03.jpg";
-S_04.src = "img/card_select/cells/Ce_04.jpg";
-S_05.src = "";
-S_06.src = "";
-S_07.src = "";
-S_08.src = "";
-S_09.src = "";
+if (C_Page_V == "...") { //On load, show NO buttons!
+for (x = 0; x < S_Ca.length; x++){ //EXPERIMENTAL
+//Nothing!
 }
-if (T_State == '2') {
-S_01.src = "img/card_select/creatures/C_01.jpg";
-S_02.src = "img/card_select/creatures/C_02.jpg";
-S_03.src = "img/card_select/creatures/C_03.jpg";
-S_04.src = "img/card_select/creatures/C_04.jpg";
-S_05.src = "img/card_select/creatures/C_05.jpg";
-S_06.src = "img/card_select/creatures/C_06.jpg";
-S_07.src = "img/card_select/creatures/C_07.jpg";
-S_08.src = "img/card_select/creatures/C_08.jpg";
-S_09.src = "img/card_select/creatures/C_09.jpg";
+} else {
+S_Cb[0].style.visibility = "visible";
+S_Cb[1].style.visibility = "visible";
+S_Cb[2].style.visibility = "visible";
+S_Cb[3].style.visibility = "visible";
+S_Cb[4].style.visibility = "visible";
+S_Cb[5].style.visibility = "visible";
+S_Cb[6].style.visibility = "visible";
+S_Cb[7].style.visibility = "visible";
+S_Cb[8].style.visibility = "visible";
+if (C_Page_V == '1') { //Unique functions for the first page
+C_I = 0;
+for (x = 0; x < S_Ca.length; x++){ //EXPERIMENTAL
+S_Ca[0].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 1) + ".jpg";
+S_Ca[1].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 2) + ".jpg";
+S_Ca[2].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 3) + ".jpg";
+S_Ca[3].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 4) + ".jpg";
+S_Ca[4].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 5) + ".jpg";
+S_Ca[5].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 6) + ".jpg";
+S_Ca[6].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 7) + ".jpg";
+S_Ca[7].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 8) + ".jpg";
+S_Ca[8].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 9) + ".jpg";
+if (T_State == '1') { //Cell Card visibility (Page 1)
+S_Cb[4].style.visibility = "hidden";
+S_Cb[5].style.visibility = "hidden";
+S_Cb[6].style.visibility = "hidden";
+S_Cb[7].style.visibility = "hidden";
+S_Cb[8].style.visibility = "hidden";
 }
-if (T_State == '3') {
-S_01.src = "img/card_select/buildings/H_01.jpg";
-S_02.src = "img/card_select/buildings/H_02.jpg";
-S_03.src = "img/card_select/buildings/H_03.jpg";
-S_04.src = "img/card_select/buildings/H_04.jpg";
-S_05.src = "img/card_select/buildings/H_05.jpg";
-S_06.src = "";
-S_07.src = "";
-S_08.src = "";
-S_09.src = "";
-}
-if (T_State == '4') {
-S_01.src = "img/card_select/space/S_01.jpg";
-S_02.src = "img/card_select/space/S_02.jpg";
-S_03.src = "img/card_select/space/S_03.jpg";
-S_04.src = "img/card_select/space/S_04.jpg";
-S_05.src = "img/card_select/space/S_05.jpg";
-S_06.src = "img/card_select/space/S_06.jpg";
-S_07.src = "img/card_select/space/S_07.jpg";
-S_08.src = "img/card_select/space/S_08.jpg";
-S_09.src = "img/card_select/space/S_09.jpg";
+if (T_State == '3') { //Building card visibility (Page 1)
+S_Cb[5].style.visibility = "hidden";
+S_Cb[6].style.visibility = "hidden";
+S_Cb[7].style.visibility = "hidden";
+S_Cb[8].style.visibility = "hidden";
 }
 }
-if (C_Page_V >= '2') {
-S_V = ((C_Page_V - 1) * 9);
-if (T_State == '2') {
-S_01.src = "img/card_select/creatures/C_" + (S_V + 1) + ".jpg";
-S_02.src = "img/card_select/creatures/C_" + (S_V + 2) + ".jpg";
-S_03.src = "img/card_select/creatures/C_" + (S_V + 3) + ".jpg";
-S_04.src = "img/card_select/creatures/C_" + (S_V + 4) + ".jpg";
-S_05.src = "img/card_select/creatures/C_" + (S_V + 5) + ".jpg";
-S_06.src = "img/card_select/creatures/C_" + (S_V + 6) + ".jpg";
-S_07.src = "img/card_select/creatures/C_" + (S_V + 7) + ".jpg";
-S_08.src = "img/card_select/creatures/C_" + (S_V + 8) + ".jpg";
-S_09.src = "img/card_select/creatures/C_" + (S_V + 9) + ".jpg";
 }
-if (T_State == '4') {
-S_01.src = "img/card_select/space/S_" + (S_V + 1) + ".jpg";
-S_02.src = "img/card_select/space/S_" + (S_V + 2) + ".jpg";
-S_03.src = "img/card_select/space/S_" + (S_V + 3) + ".jpg";
-S_04.src = "img/card_select/space/S_" + (S_V + 4) + ".jpg";
-S_05.src = "";
-S_06.src = "";
-S_07.src = "";
-S_08.src = "";
-S_09.src = "";
+}
+if (C_Page_V >= '2') { //Functions for pages starting from 2 and onwards
+C_I = ((C_Page_V - 1) * 9);
+for (x = 0; x < S_Ca.length; x++){ //EXPERIMENTAL
+S_Ca[0].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 1) + ".jpg";
+S_Ca[1].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 2) + ".jpg";
+S_Ca[2].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 3) + ".jpg";
+S_Ca[3].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 4) + ".jpg";
+S_Ca[4].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 5) + ".jpg";
+S_Ca[5].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 6) + ".jpg";
+S_Ca[6].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 7) + ".jpg";
+S_Ca[7].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 8) + ".jpg";
+S_Ca[8].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 9) + ".jpg";
+if (T_State == '4') { //Planet card visibility (Page 2)
+S_Cb[4].style.visibility = "hidden";
+S_Cb[5].style.visibility = "hidden";
+S_Cb[6].style.visibility = "hidden";
+S_Cb[7].style.visibility = "hidden";
+S_Cb[8].style.visibility = "hidden";
+}
 }
 }
 }
