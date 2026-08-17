@@ -152,6 +152,10 @@ background-color: #110F21;
 	outline: 2rem solid white;
 }
 
+.sp_card_select {
+	visibility: hidden;
+}
+
 .sp_card_select_img {
 width: 12.5rem;
 height: 15.75rem;
