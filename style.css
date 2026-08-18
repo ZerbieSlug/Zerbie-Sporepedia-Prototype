@@ -99,15 +99,15 @@ background-color: #110F21;
 	gap: 5rem;
 	justify-content: center;
 	color: white;
-	visibility: hidden;
 }
 
-.sp_info {
+#sp_info {
 		background-color: #27384B;
 		margin: 0.25rem;
 		width: 19rem;
 		height: 19rem;
 		color: white;
+		visibility: hidden;
 }
 
 #CD_N, #CD_C {
@@ -137,11 +137,16 @@ background-color: #110F21;
 	flex-direction: column;
 	gap: 1rem;
 	margin: 1rem;
+	padding: "";
 }
 .sp_card_grid_row {
 	display: flex;
 	flex-direction: row;
 	gap: 1rem;
+}
+
+#KillThisRow {
+	display: "";
 }
 
 .sp_card_select_bg {
@@ -164,7 +169,6 @@ background-color: #110F21;
 }
 
 .sp_card_select {
-	visibility: hidden;
 	width: 12.5rem;
 	height: 15.75rem;
 }
