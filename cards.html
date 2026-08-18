@@ -8,7 +8,7 @@
 <link href="style.css" rel="stylesheet">
 <!-- Title --> <title>Sporepedia Prototype</title>
 </head>
-<body onload="bootup();tabUpdate();selectUpdate()">
+<body onload="bootup();tabSkip();selectUpdate()">
 <!-- Web Title --> <header class="sp_title"><h1>SPOREPEDIA</h1></header>
 <div class="sp_nav_divider">
 <!-- Navigation --> <nav class="sp_nav_container">
@@ -24,26 +24,26 @@
 </section>
 <!-- Description/Page --><section>
 <div id="sp_desc_container"> <!-- Make this section be sorted vertically-->
-<!-- Card Information --> <article class="sp_info">
+<!-- Card Information --> <article id="sp_info">
 <!-- Creature Name --><h2 id="CD_N"></h2>
 <!-- Creature Description --><p id="CD_C"></p>
 </article>
 <!-- Page Controller --> <div class="sp_page_ctrl">
 <div>
-<button id="page_l" onclick="pageLeft();selectUpdate()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
+<button id="page_l" onclick="pageLeft();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
 </div>
 <div class="sp_page_ctrl">
 <p id="c_page">...</p>
 <p>/</p>
-<p id="m_page">...</p>
+<p>6</p>
 </div>
 <div>
-<button id="page_r" onclick="pageRight();selectUpdate()"><img src="img/menu_arrow.png"></button>
+<button id="page_r" onclick="pageRight();selectUpdate();killThatRow()"><img src="img/menu_arrow.png"></button>
 </div>
 </div>
 </div>
 </section>
-<!-- Card Selection Grid --><section class="sp_card_grid_container"> <!-- This container is vertical -->
+<!-- Card Selection Grid --><section class="sp_card_grid_container" id="grid_container"> <!-- This container is vertical -->
 <div class="sp_card_grid_row"> <!-- Each row is horizontal -->
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(1);displayUpdate();descUpdate()"><img id="SC_01" src="" class="sp_card_select_img" value="1" loading="lazy"></input>
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(2);displayUpdate();descUpdate()"><img  id="SC_02" src="" class="sp_card_select_img"  value="2" loading="lazy"></button>
@@ -54,7 +54,7 @@
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(5);displayUpdate();descUpdate()"><img id="SC_05" src="" class="sp_card_select_img"  value="5" loading="lazy"></button>
 <button class="sp_card_select sp_card_select_bg"  onclick="cardSelect(6);displayUpdate();descUpdate()"><img id="SC_06" src="" class="sp_card_select_img"  value="6" loading="lazy"></button>
 </div>
-<div class="sp_card_grid_row">
+<div class="sp_card_grid_row" id="KillThisRow">
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(7);displayUpdate();descUpdate()"><img id="SC_07" src="" class="sp_card_select_img"  value="7" loading="lazy"></button>
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(8);displayUpdate();descUpdate()"><img id="SC_08"  src="" class="sp_card_select_img"  value="8" loading="lazy"></button>
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(9);displayUpdate();descUpdate()"><img  id="SC_09" src="" class="sp_card_select_img"  value="9" loading="lazy"></button>
@@ -62,10 +62,10 @@
 </section>
 </main>
 <!-- Category Tabs --><nav class="sp_category_container"> <!-- This section should be sorted vertically -->
-<!-- Cell tab --><button class="sp_category sp_tab_c" id="tab_cel" onclick="tabUpdate(1);cardSelect_BG(1);selectUpdate()"></button>
-<!-- Creature tab --> <button class="sp_category sp_tab_cr" id="tab_cre" onclick="tabUpdate(2);cardSelect_BG(2);selectUpdate()"></button>
-<!-- Building tab --> <button class="sp_category sp_tab_h" id="tab_hou" onclick="tabUpdate(3);cardSelect_BG(3);selectUpdate()"></button>
-<!-- Ship tab --><button class="sp_category sp_tab_s" id="tab_spa" onclick="tabUpdate(4);cardSelect_BG(4);selectUpdate()"></button>
+<!-- Cell tab --><button class="sp_category sp_tab_c" id="tab_cel" onclick="tabSkip(1);selectUpdate()"></button>
+<!-- Creature tab --> <button class="sp_category sp_tab_cr" id="tab_cre" onclick="tabSkip(2);selectUpdate()"></button>
+<!-- Building tab --> <button class="sp_category sp_tab_h" id="tab_hou" onclick="tabSkip(3);selectUpdate()"></button>
+<!-- Ship tab --><button class="sp_category sp_tab_s" id="tab_spa" onclick="tabSkip(4);selectUpdate()"></button>
 </nav>
 </div>
 </body>
@@ -121,19 +121,18 @@ var C_Page = document.getElementById("c_page"); //current page display (source)
 var C_Page_V; //adjustable page value
 var Page_R = document.getElementById("page_r"); //useless id
 var Page_L = document.getElementById("page_l"); //useless id
-var M_Page = document.getElementById("m_page"); //adjustable max page (source)
-var M_Page_V; //adjustable maximum page value
-var Page_Desc = document.getElementById("sp_desc_container"); // Creature Name + Description + Page Controller
+var Page_Desc = document.getElementById("sp_info"); // Creature Name + Description
 
 //(Card Selectors)
 var S_C; //select indicator
 var S_Ca = document.getElementsByClassName("sp_card_select_img"); //EXPERIMENTAL - Card Arrays
 var S_Cb = document.getElementsByClassName("sp_card_select"); //Card Array Buttons
 var S_C_BG = document.getElementsByClassName("sp_card_select_bg"); // Card Select Background
+var KTR = document.getElementById("KillThisRow"); //Hide this row for a special page
+var Exp = document.getElementById("grid_container"); //make this big on page 6
 
 // (Card Source Assemblers for Main and Selection Cards)
-var C_B; //Card Basis - Main or Select?
-var C_T; //Card Tab - Tab Folder Name
+var C_Cat; //Card Category filepath for selection
 var C_N; //Card Name - Image Acronym
 var C_I; //Card Identity - Image Numeral.
 var x; //Card Array variable
@@ -143,12 +142,10 @@ var T_Ce = document.getElementById("tab_cel"); // cell tab source
 var T_Cr = document.getElementById("tab_cre"); // creature tab source
 var T_Ho = document.getElementById("tab_hou"); // house tab source
 var T_Sp = document.getElementById("tab_spa"); // space tab source
-var T_State; //Current Tab Selected
 
 // (Debug)
 var db_S_C = document.getElementById("db_S_C"); //debug select indicator (source)
 var db_Display = document.getElementById("db_D"); //debug big card value
-var db_T_State = document.getElementById("db_tab"); //Debug Tab Selection
 var db_Cat_Assemble = document.getElementById("db_cat_ass"); // Debug filepath assembler
 
 //[[Scripts]]
@@ -156,156 +153,97 @@ var db_Cat_Assemble = document.getElementById("db_cat_ass"); // Debug filepath a
 function bootup() {
 audio_flg = 0;
 S_C = 0;
-C_Page_V = "...";
+C_Page_V = "1";
 Display = 0;
 M_C.src = "img/card_main/debug-slug.png";
-M_C_A = 0;
-C_B = 0;
-C_T = 0;
+C_Cat = 0;
 C_N = 0;
 C_I = 0;
 db_S_C.textContent = S_C;
 C_Page.textContent = C_Page_V;
 db_D.textContent = Display;
-T_State = 0;
 }
 
 // ((Page Scripts)
 // (Page Previous)
 function pageLeft() {
+Page_Desc.style.visibility = "hidden";
 C_Page_V = C_Page_V - 1;
 M_C.src = "img/card_main/debug-slug.png";
 S_C = 0;
 db_S_C.textContent = S_C;
-charName_Input.textContent = "Select a Creature"; // Reset Creature Name
-charCredit_Input.textContent = ""; // Blank Description
 if (C_Page_V == 0) {
-if (T_State == 1 || 3) { //Cell and Building have no pages to turn
-C_Page_V = 1;
-}
-if (T_State == 2) { //Creature loops back to page 3
-C_Page_V = 3;
-}
-if (T_State == 4) { //Space loops back to page 2
-C_Page_V = 2;
-}
+C_Page_V = 6
 }
 C_Page.textContent = C_Page_V;
 }
 
 // (Page Next)
 function pageRight() {
+Page_Desc.style.visibility = "hidden";
 C_Page_V = C_Page_V + 1;
 M_C.src = "img/card_main/debug-slug.png";
 S_C = 0;
 db_S_C.textContent = S_C;
-charName_Input.textContent = "Select a Creature"; // Reset Creature Name
-charCredit_Input.textContent = ""; // Blank Description
-if (T_State == 1) { //Cells only have 1 page of content
-if (C_Page_V == 2) {
+if (C_Page_V == 7) { //Cells only have 1 page of content
 C_Page_V = 1;
-}
-}
-if (T_State == 2) { //Creatures only have 3 page of content
-if (C_Page_V == 4) {
-C_Page_V = 1;
-}
-}
-if (T_State == 3) { //Buildings only have 1 page of content
-if (C_Page_V == 2) {
-C_Page_V = 1;
-}
-}
-if (T_State == 4) { //Planets only have 2 page of content
-if (C_Page_V == 3) {
-C_Page_V = 1;
-}
 }
 C_Page.textContent = C_Page_V;
 }
 
 // ((Tab-Icon script))
-function tabUpdate(num) { //By default on load, everything will be hidden
-C_Page_V = "...";
+function tabSkip(num) { //By default on load, name + description will be hidden
+C_Page_V = 1;
 C_Page.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
-charName_Input.textContent = "Select a Creature";
 charCredit_Input.textContent = "";
 if (num == '1') { //Cell Icon Anim + Page Reset + Tab State 
-C_Page_V = 1; // Reset Current Page Value
+C_Page_V = 1; // Skip to page where Cells first appear
 C_Page.textContent = C_Page_V;
-Page_Desc.style.visibility = "visible"; // Show name, description, page ctrl
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
-charName_Input.textContent = "Select a Creature"; // Reset Creature Name
-charCredit_Input.textContent = ""; // Blank Description
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_01.png')"; // Cell is on, everything Off
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
-T_State = 1;
-C_T = "cells"; //Update Card Assembler Category
-C_N = "Ce_"; //Filename
-db_T_State.textContent = T_State;
-db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
-M_Page_V = 1;
-M_Page.textContent = M_Page_V;
+KTR.style.display = "flex";
+Exp.style.padding = "0rem";
+Page_Desc.style.visibility = "hidden";
 }
 if (num == '2') { //Creature Icon Anim + Page Reset + Tab State 
 C_Page_V = 1; // Reset Current Page Value
 C_Page.textContent = C_Page_V;
-Page_Desc.style.visibility = "visible"; // Show name, description, page ctrl
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
-charName_Input.textContent = "Select a Creature"; // Reset Creature Name
-charCredit_Input.textContent = ""; // Blank Description
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_01.png')"; // Creature is on, everything Off
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
-T_State = 2;
-C_T = "creatures"; //Update Card Assembler Category
-C_N = "C_"; //Filename
-db_T_State.textContent = T_State;
-db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
-M_Page_V = 3;
-M_Page.textContent = M_Page_V;
+KTR.style.display = "flex";
+Exp.style.padding = "0rem";
+Page_Desc.style.visibility = "hidden";
 }
-if (num == '3') { //Creature Icon Anim + Page Reset + Tab State 
-C_Page_V = 1; // Reset Current Page Value
+if (num == '3') { //Building Icon Anim + Page Reset + Tab State 
+C_Page_V = 4; // Reset Current Page Value
 C_Page.textContent = C_Page_V;
-Page_Desc.style.visibility = "visible"; // Show name, description, page ctrl
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
-charName_Input.textContent = "Select a Creature"; // Reset Creature Name
-charCredit_Input.textContent = ""; // Blank Description
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_01.png')"; // House is on, everything Off
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
-T_State = 3;
-C_T = "buildings"; //Update Card Assembler Category
-C_N = "H_"; //Filename
-db_T_State.textContent = T_State;
-db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
-M_Page_V = 1;
-M_Page.textContent = M_Page_V;
+KTR.style.display = "flex";
+Exp.style.padding = "0rem";
+Page_Desc.style.visibility = "hidden";
 }
 if (num == '4') { //Space Icon Anim + Page Reset + Tab State 
-C_Page_V = 1; // Reset Current Page Value
+C_Page_V = 5; // Reset Current Page Value
 C_Page.textContent = C_Page_V; // Blank Description
-Page_Desc.style.visibility = "visible"; // Show name, description, page ctrl
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
-charName_Input.textContent = "Select a Creature"; // Reset Creature Name
-charCredit_Input.textContent = ""; // Blank description
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_01.png')"; // Space is on, everything Off
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
-T_State = 4;
-C_T = "space"; //Update Card Assembler Category
-C_N = "S_"; //Filename
-db_T_State.textContent = T_State;
-db_Cat_Assemble.textContent = C_T + C_N + C_I; //Debug Card Assembler Display
-M_Page_V = 2;
-M_Page.textContent = M_Page_V;
+KTR.style.display = "flex";
+Exp.style.padding = "0rem";
+Page_Desc.style.visibility = "hidden";
 }
 }
 
@@ -339,46 +277,232 @@ if (num == '9') {
 S_C = 9;
 }
 db_S_C.textContent = S_C;
-db_Cat_Assemble.textContent = C_T + C_N + C_I;
+db_Cat_Assemble.textContent = C_Cat + C_N + C_I;
 }
 
-// ((Card Selection Background Update))
-function cardSelect_BG(num) {
-if (num == '1') { // update bg to cell
-S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')"; //Update background for cell
+// (Display Update)
+function displayUpdate(){
+if (C_Page_V == '1') {
+if (S_C >= 5) {
+Display = (C_I + S_C - 4);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
+} else {
+Display = (C_I + S_C);
+M_C.src = "img/card_main/cells/Ce_0" + Display + ".jpg";
+}
+}
+if (C_Page_V == '2') {
+if (S_C <= 4) {
+Display = (5 + S_C);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
+} else {
+Display = (C_I + S_C - 5);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + Display + ".jpg";
+}
+}
+if (C_Page_V == '3') {
+Display = (C_I + S_C + 1);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + Display + ".jpg";
+}
+if (C_Page_V == '4') {
+if (S_C <= 4) {
+Display = (23 + S_C);
+M_C.src = "img/card_main/creatures/C_" + Display + ".jpg";
+} else {
+Display = (C_I + S_C - 4);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
+}
+}
+if (C_Page_V == '5') {
+Display = (C_I + S_C);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
+}
+if (C_Page_V == '6') {
+Display = (C_I + S_C);
+M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
+}
+}
+
+// ((Description Update Script))
+function descUpdate () {
+Page_Desc.style.visibility = "visible";
+if (C_Page_V == '1') {
+if (S_C <= 4) {
+charName_Input.innerHTML = "Nameless Cell";
+charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Cell should have the same name and description!" ;
+}
+if (S_C == 5) {
+charName_Input.innerHTML = "Zerbie";
+charCredit_Input.innerHTML = "Made by: ???" + "<br>" + "Hello I'm Zerbie, and I forgot the rest of my creations!" ;
+}
+if (S_C >= 6) {
+charName_Input.innerHTML = "Nameless Creature";
+charCredit_Input.innerHTML = "Made by: zerbie" + "<br>" + "What was this one called again??" ;
+}
+}
+if (C_Page_V == '2' || '3' ) {
+charName_Input.innerHTML = "Nameless Creature";
+charCredit_Input.innerHTML = "Made by: zerbie" + "<br>" + "What was this one called again??" ;
+}
+if (C_Page_V == '4') {
+if (S_C <= 4) {
+charName_Input.innerHTML = "Nameless Creature";
+charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "What was this one called again??" ;
+}
+if (S_C >= 5) {
+charName_Input.innerHTML = "Nameless Building";
+charCredit_Input.innerHTML = "Made by: zerbie" + "<br>" + "I'm not a freaking architect!" ;
+}
+}
+if (C_Page_V == '5' ) {
+charName_Input.innerHTML = "Planet";
+charCredit_Input.innerHTML = "Made by: ???" + "<br>" + "I think my brother made some of these..." ;
+}
+if (C_Page_V == '6') {
+if (S_C == 1) {
+charName_Input.innerHTML = "Aqua";
+charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "Uuu, I think I understand mushrooms now!" ;
+}
+if (S_C == 2) {
+charName_Input.innerHTML = "Seth";
+charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "I don't think you know what 'Spore' means..." ;
+}
+if (S_C == 3) {
+charName_Input.innerHTML = "Green";
+charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "🤷" ;
+}
+if (S_C == 4) {
+charName_Input.innerHTML = "Orange";
+charCredit_Input.innerHTML = "Made by: Asgore | Sister of: Pink" + "<br>" + "CALL ME A RAT AGAIN, SAY IT AGAIN YOU COWARD!!!" ;
+}
+if (S_C == 5) {
+charName_Input.innerHTML = "Yellow";
+charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "BLUE! I HAVEN'T CHANGED!" ;
+}
+if (S_C == 6) {
+charName_Input.innerHTML = "Blue";
+charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "Strangely, in an graphical sense, I haven't changed either..." ;
+}
+}
+}
+
+// ((Select Icon Updates))
+function selectUpdate () {
+if (C_Page_V == '1') { //Unique functions for the first page
+C_I = 0;
+C_Cat = "creatures";
+C_N = "C_";
+for (x = 0; x < S_Ca.length; x++){ //Sorting Algorithm for image files whose numerals start with "0x"
+S_Ca[0].src = "img/card_select/cells/Ce_0" + (C_I + 1) + ".png";
+S_Ca[1].src = "img/card_select/cells/Ce_0" + (C_I + 2) + ".png";
+S_Ca[2].src = "img/card_select/cells/Ce_0" + (C_I + 3) + ".png";
+S_Ca[3].src = "img/card_select/cells/Ce_0" + (C_I + 4) + ".png";
+S_Ca[4].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 1) + ".png";
+S_Ca[5].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 2) + ".png";
+S_Ca[6].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 3) + ".png";
+S_Ca[7].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 4) + ".png";
+S_Ca[8].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 5) + ".png";
+S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
 S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
 S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
 S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
-S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
-S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
-S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
-S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
-S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_Ce.jpg')";
+S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
 }
-if (num == '2') { // update bg to creature
-S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; //Update background for creature
-S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
-S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_C.jpg')"; 
 }
-if (num == '3') { // update bg to building
-S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_H.jpg')"; //Update background for building
-S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
-S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
-S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
-S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
+if (C_Page_V == '2') { //Functions for pages starting from 2 and onwards
+C_I = ((C_Page_V - 1) * 9 + 1);
+C_Cat = "creatures";
+C_N = "C_";
+for (x = 0; x < S_Ca.length; x++){
+S_Ca[0].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I - 4) + ".png";
+S_Ca[1].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I - 3) + ".png";
+S_Ca[2].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I - 2) + ".png";
+S_Ca[3].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I - 1) + ".png";
+S_Ca[4].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I) + ".png";
+S_Ca[5].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 1) + ".png";
+S_Ca[6].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 2) + ".png";
+S_Ca[7].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 3) + ".png";
+S_Ca[8].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 4) + ".png";
+S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+}
+}
+if (C_Page_V == '3') { //Functions for pages starting from 2 and onwards
+C_I = 13;
+C_Cat = "creatures";
+C_N = "C_";
+for (x = 0; x < S_Ca.length; x++){
+S_Ca[0].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 2) + ".png";
+S_Ca[1].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 3) + ".png";
+S_Ca[2].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 4) + ".png";
+S_Ca[3].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 5) + ".png";
+S_Ca[4].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 6) + ".png";
+S_Ca[5].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 7) + ".png";
+S_Ca[6].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 8) + ".png";
+S_Ca[7].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 9) + ".png";
+S_Ca[8].src = "img/card_select/" + C_Cat + "/" + C_N + (C_I + 10) + ".png";
+S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+}
+}
+if (C_Page_V == '4') { //Functions for pages starting from 2 and onwards
+C_I = 0;
+C_Cat = "buildings";
+C_N = "H_";
+for (x = 0; x < S_Ca.length; x++){
+S_Ca[0].src = "img/card_select/creatures/C_" + (C_I + 24) + ".png";
+S_Ca[1].src = "img/card_select/creatures/C_" + (C_I + 25) + ".png";
+S_Ca[2].src = "img/card_select/creatures/C_" + (C_I + 26) + ".png";
+S_Ca[3].src = "img/card_select/creatures/C_" + (C_I + 27) + ".png";
+S_Ca[4].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 1) + ".png";
+S_Ca[5].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 2) + ".png";
+S_Ca[6].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 3) + ".png";
+S_Ca[7].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 4) + ".png";
+S_Ca[8].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 5) + ".png";
+S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
+S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_C.jpg')";
 S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
 S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
 S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
 S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_H.jpg')";
 }
-if (num == '4') { // update bg to Space
-S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_S.jpg')"; //Update background for space
+}
+if (C_Page_V == '5') { //Functions for pages starting from 2 and onwards
+C_I = 0;
+C_Cat = "space";
+C_N = "S_";
+for (x = 0; x < S_Ca.length; x++){
+S_Ca[0].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 1) + ".png";
+S_Ca[1].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 2) + ".png";
+S_Ca[2].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 3) + ".png";
+S_Ca[3].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 4) + ".png";
+S_Ca[4].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 5) + ".png";
+S_Ca[5].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 6) + ".png";
+S_Ca[6].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 7) + ".png";
+S_Ca[7].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 8) + ".png";
+S_Ca[8].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 9) + ".png";
+S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
@@ -389,215 +513,40 @@ S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 }
 }
-
-// (Display Update)
-function displayUpdate(){
-if (C_Page_V == 1) {
-Display = (C_I + S_C);
-M_C.src = "img/card_main/" + C_T + "/" + C_N + "0" + Display + ".jpg";
-} else {
-Display = (C_Page_V * 9) - (9 - S_C);
-M_C.src = "img/card_main/" + C_T + "/" + C_N + (Display) + ".jpg";
-}
-db_D.textContent = Display;
-}
-
-// ((Description Update Script))
-function descUpdate () {
-if (T_State == '1') { // Cell Descriptions
-if (Display <= 4) {
-charName_Input.innerHTML = "Nameless Cell";
-charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Cell should have the same name and description!" ;
-}
-}
-if (T_State == '2') { // Creature Descriptions
-if (Display == '1') {
-charName_Input.innerHTML = "Zerbie";
-charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "It's me!" ;
-}
-if (Display == '2') {
-charName_Input.innerHTML = "Waddlin";
-charCredit_Input.innerHTML = "Made by: Zerbie2" + "<br>" +  "Wanyo" ;
-}
-if (Display == '3') {
-charName_Input.innerHTML = "Void Terminator";
-charCredit_Input.innerHTML = "Made by: Zerbi3" + "<br>" + "HOUUUURRRRGHHH (This is a modded creation)" ;
-}
-if (Display == '4') {
-charName_Input.innerHTML = "Venerian Mud Sniffer";
-charCredit_Input.innerHTML = "Made by: Zerbie4" + "<br>" + "It dig on ground for tuber" ;
-}
-if (Display == '5') {
-charName_Input.innerHTML = "Vargingrate";
-charCredit_Input.innerHTML = "Made by: Zerbie5" + "<br>" + "I uh... I don't know what to do with this one.";
-}
-if (Display == '6') {
-charName_Input.innerHTML = "Tumortulus";
-charCredit_Input.innerHTML = "Made by: Zerbie6" + "<br>" + "Cancer if it had legs" ;
-}
-if (Display == '7') {
-charName_Input.innerHTML = "The Warder";
-charCredit_Input.innerHTML = "Made by: Zerbie7" + "<br>" + "Shut Up!!!" ;
-}
-if (Display == '8') {
-charName_Input.innerHTML = "Slaughterbear";
-charCredit_Input.innerHTML = "Made by: Zerbie8" + "<br>" + "It's not a bear, but it do slaughter!" ;
-}
-if (Display == '9') {
-charName_Input.innerHTML = "Seeker of Naughtiness";
-charCredit_Input.innerHTML = "Made by: Zerbie9" + "<br>" + "This is a modded creation. Also I'm gonna stop doing these descriptions!!!" ;
-}
-if (Display == '10') {
-charName_Input.innerHTML = "Roosteroid";
-charCredit_Input.innerHTML = "Made by: Zerbie10" ;
-}
-if (Display == '11') {
-charName_Input.innerHTML = "Qwexcnal";
-charCredit_Input.innerHTML = "Made by: Zerbie11" ;
-}
-if (Display == '12') {
-charName_Input.innerHTML = "Quartzhog";
-charCredit_Input.innerHTML = "Made by: Zerbie12" ;
-}
-if (Display == '13') {
-charName_Input.innerHTML = "QuakQuk";
-charCredit_Input.innerHTML = "Made by: Zerbie13" ;
-}
-if (Display == '14') {
-charName_Input.innerHTML = "The Qu";
-charCredit_Input.innerHTML = "Made by: Zerbie14" + "<br>" + "It's actually them oh my god RUN!!!" ;
-}
-if (Display == '15') {
-charName_Input.innerHTML = "OVERKILL9000";
-charCredit_Input.innerHTML = "Made by: Zerbie15" ;
-}
-if (Display == '16') {
-charName_Input.innerHTML = "Norgusborg";
-charCredit_Input.innerHTML = "Made by: Zerbie16" ;
-}
-if (Display == '17') {
-charName_Input.innerHTML = "The Warden";
-charCredit_Input.innerHTML = "Made by: Zerbie17" + "<br>" + "mods make it so much better" ;
-}
-if (Display == '18') {
-charName_Input.innerHTML = "MeatleBeetle";
-charCredit_Input.innerHTML = "Made by: Zerbie18" + "<br>" + "Ok now I'm gonna stop crediting Zerbie!" ;
-}
-if (Display == '19') {
-charName_Input.innerHTML = "Mattan";
-charCredit_Input.innerHTML = "JOHN MATTAN JOHN MATTAN JOHN MATTON" ;
-}
-if (Display == '20') {
-charName_Input.innerHTML = "Maniken";
-charCredit_Input.innerHTML = "When the poster is sus" ;
-}
-if (Display == '21') {
-charName_Input.innerHTML = "Kirblee";
-charCredit_Input.innerHTML = "Who the heck is this guy?" ;
-}
-if (Display == '22') {
-charName_Input.innerHTML = "King Dedebe";
-charCredit_Input.innerHTML = "Ruh" ;
-}
-if (Display == '23') {
-charName_Input.innerHTML = "Immature Fraudulator";
-charCredit_Input.innerHTML = "What lore does this fellow have? IDK I forgot!" ;
-}
-if (Display == '24') {
-charName_Input.innerHTML = "Gumblow";
-charCredit_Input.innerHTML = "eep" ;
-}
-if (Display == '25') {
-charName_Input.innerHTML = "GuardDrag";
-charCredit_Input.innerHTML = "So much DarkSpore parts dude!" ;
-}
-if (Display == '26') {
-charName_Input.innerHTML = "Graze Horse";
-charCredit_Input.innerHTML = "I'm still betting my money and carrots on the pink one" ;
-}
-if (Display == '27') {
-charName_Input.innerHTML = "Parastella Crystallis - Genwel Meteonelfilis";
-charCredit_Input.innerHTML = "Yes for just the low low price of $20 you can have SacredFaye's LEGALLIZED cosmic Elfilis as a bonus boss fight!!" ;
-}
-}
-if (T_State == '3') { // Building Descriptions
-if (Display <= 5) {
-charName_Input.innerHTML = "Nameless Building";
-charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Building should have the same name and description!" ;
-}
-}
-if (T_State == '4') {
-if (Display <= 13) {
-charName_Input.innerHTML = "Nameless Planet";
-charCredit_Input.innerHTML = "Made by: Zerbie" + "<br>" + "Every Planet should have the same name and description!" ;
-}
-}
-}
-
-// ((Select Icon Updates))
-function selectUpdate () {
-if (C_Page_V == "...") { //On load, show NO buttons!
-for (x = 0; x < S_Ca.length; x++){
-//Nothing!
-}
-} else { // Show EVERYTHING
-S_Cb[0].style.visibility = "visible";
-S_Cb[1].style.visibility = "visible";
-S_Cb[2].style.visibility = "visible";
-S_Cb[3].style.visibility = "visible";
-S_Cb[4].style.visibility = "visible";
-S_Cb[5].style.visibility = "visible";
-S_Cb[6].style.visibility = "visible";
-S_Cb[7].style.visibility = "visible";
-S_Cb[8].style.visibility = "visible";
-if (C_Page_V == '1') { //Unique functions for the first page
+if (C_Page_V == '6') {
 C_I = 0;
-for (x = 0; x < S_Ca.length; x++){ //Sorting Algorithm for image files whose numerals start with "0x"
-S_Ca[0].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 1) + ".png";
-S_Ca[1].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 2) + ".png";
-S_Ca[2].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 3) + ".png";
-S_Ca[3].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 4) + ".png";
-S_Ca[4].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 5) + ".png";
-S_Ca[5].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 6) + ".png";
-S_Ca[6].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 7) + ".png";
-S_Ca[7].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 8) + ".png";
-S_Ca[8].src = "img/card_select/" + C_T + "/" + C_N + "0" + (C_I + 9) + ".png";
-if (T_State == '1') { //Cell Card visibility (Page 1)
-S_Cb[4].style.visibility = "hidden"; //Cards beyond the total amount of entries in a category should be hidden
-S_Cb[5].style.visibility = "hidden";
-S_Cb[6].style.visibility = "hidden";
-S_Cb[7].style.visibility = "hidden";
-S_Cb[8].style.visibility = "hidden";
-}
-if (T_State == '3') { //Building card visibility (Page 1)
-S_Cb[5].style.visibility = "hidden"; //Cards beyond the total amount of entries in a category should be hidden
-S_Cb[6].style.visibility = "hidden";
-S_Cb[7].style.visibility = "hidden";
-S_Cb[8].style.visibility = "hidden";
-}
-}
-}
-}
-if (C_Page_V >= '2') { //Functions for pages starting from 2 and onwards
-C_I = ((C_Page_V - 1) * 9);
+C_Cat = "flowers";
+C_N = "F_";
 for (x = 0; x < S_Ca.length; x++){
-S_Ca[0].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 1) + ".png";
-S_Ca[1].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 2) + ".png";
-S_Ca[2].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 3) + ".png";
-S_Ca[3].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 4) + ".png";
-S_Ca[4].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 5) + ".png";
-S_Ca[5].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 6) + ".png";
-S_Ca[6].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 7) + ".png";
-S_Ca[7].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 8) + ".png";
-S_Ca[8].src = "img/card_select/" + C_T + "/" + C_N + (C_I + 9) + ".png";
-if (T_State == '4') { //Planet card visibility (Page 2)
-S_Cb[4].style.visibility = "hidden";
-S_Cb[5].style.visibility = "hidden";
-S_Cb[6].style.visibility = "hidden";
-S_Cb[7].style.visibility = "hidden";
-S_Cb[8].style.visibility = "hidden";
+S_Ca[0].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 1) + ".png";
+S_Ca[1].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 2) + ".png";
+S_Ca[2].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 3) + ".png";
+S_Ca[3].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 4) + ".png";
+S_Ca[4].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 5) + ".png";
+S_Ca[5].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 6) + ".png";
+S_Ca[6].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 7) + ".png";
+S_Ca[7].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 8) + ".png";
+S_Ca[8].src = "img/card_select/" + C_Cat + "/" + C_N + "0" + (C_I + 9) + ".png";
+S_C_BG[0].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[1].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[2].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[3].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[4].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[5].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[6].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[7].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
+S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 }
 }
+}
+
+function killThatRow() {
+if (C_Page_V == '6') {
+KTR.style.display = "none";
+Exp.style.padding = "8.38rem 0rem";
+} else {
+KTR.style.display = "flex";
+Exp.style.padding = "0rem";
 }
 }
 </script>
