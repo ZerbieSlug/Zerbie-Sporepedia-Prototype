@@ -179,8 +179,8 @@ var T_Sp = document.getElementById("tab_spa"); // space tab source
 var Jiggle; //Cards do a dance when tabs get pressed;
 
 // (Responsive Design)
-var ScreenW_Desktop = 1080;
-var ScreenW_Mobile = 414;
+var ScreenW_Desktop = 1920;
+var ScreenW_Mobile_S = 414;
 var T_pad; //padding config for normal tabs
 var T_C_pad; //padding config for selected tabs
 var E_pad; //padding config for grid container;
@@ -207,15 +207,25 @@ Jiggle = 0;
 
 //(Responsive Check - Check screen size before then changing certain style functions)
 function screenCheck() {
-if (window.innerWidth <= ScreenW_Mobile) {
+if (window.innerWidth <= ScreenW_Mobile_S) {
 T_pad = "2rem 2rem";
 T_C_pad = "2.5rem 2rem";
 E_pad = "0rem";
 E_r_pad = "2.22rem 0rem";
 P_D_hi = "16rem";
-P_D_hi_a = "0rem";
+P_D_hi_a = "0px";
 Page_Desc.style.height = P_D_hi_a;
-} else {
+}
+if (window.innerWidth >= ScreenW_Mobile_S && window.innerWidth <= ScreenW_Desktop) {
+T_pad = "4rem 4rem";
+T_C_pad = "12rem 4rem";
+E_pad = "2rem";
+E_r_pad = "8.88rem 1rem";
+P_D_hi = "19rem";
+P_D_hi_a = "0px";
+Page_Desc.style.height = P_D_hi_a;
+}
+if (window.innerWidth = ScreenW_Desktop){
 T_pad = "2.5rem 2rem";
 T_C_pad = "2.5rem 2.5rem";
 E_pad = "1rem";
@@ -229,7 +239,11 @@ Page_Desc.style.height = P_D_hi_a;
 // ((Page Scripts)
 // (Page Previous)
 function pageLeft() {
+if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.display = "none";
+} else {
 Page_Desc.style.height = P_D_hi_a;
+}
 Page_Desc.style.visibility = "hidden";
 C_Page_V = C_Page_V - 1;
 M_C.src = "img/card_main/debug-slug.png";
@@ -243,7 +257,11 @@ C_Page_M.textContent = C_Page_V;
 
 // (Page Next)
 function pageRight() {
+if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.display = "none";
+} else {
 Page_Desc.style.height = P_D_hi_a;
+}
 Page_Desc.style.visibility = "hidden";
 C_Page_V = C_Page_V + 1;
 M_C.src = "img/card_main/debug-slug.png";
@@ -302,8 +320,12 @@ T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
 T_Ce.style.padding = T_pad;
 T_Ce.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
+if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.display = "none";
+} else {
 Page_Desc.style.visibility = "hidden";
 Page_Desc.style.height = P_D_hi_a;
+}
 Exp.style.padding = E_pad;
 }
 if (num == '3') { //Building Icon Anim + Page Reset + Tab State 
@@ -324,8 +346,12 @@ T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
 T_Sp.style.padding = T_pad;
 T_Sp.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
+if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.display = "none";
+} else {
 Page_Desc.style.visibility = "hidden";
 Page_Desc.style.height = P_D_hi_a;
+}
 Exp.style.padding = E_pad;
 }
 if (num == '4') { //Space Icon Anim + Page Reset + Tab State 
@@ -346,8 +372,12 @@ T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
 T_Ho.style.padding = T_pad;
 T_Ho.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
+if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.display = "none";
+} else {
 Page_Desc.style.visibility = "hidden";
 Page_Desc.style.height = P_D_hi_a;
+}
 Exp.style.padding = E_pad;
 }
 }
@@ -437,8 +467,13 @@ M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
 
 // ((Description Update Script))
 function descUpdate () {
+if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.display = "flex";
+Page_Desc.style.height = P_D_hi_a;
+} else {
 Page_Desc.style.visibility = "visible";
-Page_Desc.style.height = P_D_hi;
+Page_Desc.style.height = P_D_hi_a;
+}
 if (C_Page_V == '1') {
 if (S_C <= 4) {
 charName_Input.innerHTML = "Nameless Cell";
