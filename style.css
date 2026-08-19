@@ -16,10 +16,15 @@
 	outline: inherit;
 }*/
 
+button {
+     background: none;
+     border: none;
+     padding: 0;
+}
+
 body {
 	display: flex;
 	flex-direction: column;
-	align-items: center;
 	background-color: #27384B;
 }
 
@@ -34,11 +39,13 @@ footer {
 
 .sp_title {
 	text-align: center;
+	transform: translateY(2rem);
 }
 
 .sp_nav_divider {
 	display: flex;
 	flex-direction: row;
+	margin: 0rem 8rem;
 }
 
 /* Main Container */
@@ -46,10 +53,11 @@ footer {
 display: flex;
 flex-direction: row;
 gap: 0.5rem;
-border-radius: 2rem;
+border-radius: 2rem 0rem 2rem 2rem;
 background-color: #110F21;
 }
 
+/* For index.html */
 .sp_intro_container {
 	display: flex;
 	flex-direction: column;
@@ -60,16 +68,33 @@ background-color: #110F21;
 
 /* Navigation */
 .sp_nav_container {
-	margin: 1rem;
 	display: flex;
 	flex-direction: column;
 	gap: 0.5rem;
 }
 
 .sp_nav {
-	background-color: cyan;
-	text-align: right;
+	text-align: center;
+	border-radius: 1rem;
+	margin: 0.5rem;
+	background-color: #110F21;
+	transition: all 0.3s ease;
+	color: white;
 }
+
+.sp_nav_music {
+	text-align: center;
+	border-radius: 1rem;
+	padding: 1rem 0rem;
+	background-color: #110F21;
+	transition: all 0.3s ease;
+	color: white;
+}
+
+.sp_nav:hover, .sp_nav_music:hover {
+	background-color: #29244f;
+}
+
 /* Main Card */
 .sp_card_main {
 	margin: 1rem;
@@ -78,17 +103,6 @@ background-color: #110F21;
 
 .sp_card_main_img {
  width: 25rem;
- animation: /*cardAnim 0.25s ease 0s 1 normal forwards*/;
-}
-
- @keyframes cardAnim {
-	0% {
-		transform: scale(0);
-	}
-
-	100% {
-		transform: scale(1);
-	}
 }
 
 /* Description + Page Controller */
@@ -102,12 +116,24 @@ background-color: #110F21;
 }
 
 #sp_info {
+		display: flex;
+		flex-direction: column;
 		background-color: #27384B;
 		margin: 0.25rem;
 		width: 19rem;
 		height: 19rem;
 		color: white;
 		visibility: hidden;
+}
+
+.sp_info_mobile {
+	display: flex;
+	flex-direction: column;
+}
+
+#icon_disp {
+	display: flex;
+	width: 8rem;
 }
 
 #CD_N, #CD_C {
@@ -120,15 +146,46 @@ background-color: #110F21;
 .sp_page_ctrl {
 		display: flex;
 		flex-direction: row;
-		background-color: #516e94;
 		justify-content: center;
-		align-items: center;
-		width: 19rem;
-		height: 4.27rem;
+		gap: 1rem;
+}
+
+.sp_page_ctrl_mobile {
+	display: none;
+		flex-direction: row;
+		justify-content: center;
+		gap: 1rem;
+}
+
+.sp_page_number {
+			display: flex;
+		flex-direction: row;
+		justify-content: center;
+		vertical-align: middle;
+		font-family: Spore;
+		font-size: 2rem;
+		margin-top: 0.5rem;
+		vertical-align: middle;
+}
+
+.sp_page_forward:hover {
+	filter: brightness(200%);
+}
+
+.sp_page_forward:active {
+	filter: brightness(400%);
 }
 
 .sp_page_reverse {
 	transform: scale(-1, -1);
+}
+
+.sp_page_reverse:hover {
+		filter: brightness(200%);
+}
+
+.sp_page_reverse:active {
+		filter: brightness(400%);
 }
 
 /* Card Select Grid */
@@ -137,7 +194,7 @@ background-color: #110F21;
 	flex-direction: column;
 	gap: 1rem;
 	margin: 1rem;
-	padding: "";
+	padding: 1rem;
 }
 .sp_card_grid_row {
 	display: flex;
@@ -154,14 +211,40 @@ background-color: #110F21;
 		background-repeat: no-repeat;
 		background-size: cover;
 		background-position: center;
+		animation: "";
+		border-radius: 1.5rem;
 }
 
-.sp_card_select_img:hover {
-	filter: brightness(125%);
-}
+@keyframes cardJiggle {
+	0%,
+	100% {
+		transform: rotate(0deg);
+		transform-origin: 50% 50%;
+	}
 
-.sp_card_select_img:active {
-	filter: brightness(175%);
+	10% {
+		transform: rotate(4deg);
+	}
+
+	20%,
+	40%,
+	60% {
+		transform: rotate(-5deg);
+	}
+
+	30%,
+	50%,
+	70% {
+		transform: rotate(5deg);
+	}
+
+	80% {
+		transform: rotate(-4deg);
+	}
+
+	90% {
+		transform: rotate(4deg);
+	}
 }
 
 .sp_card_select:focus-visible {
@@ -169,12 +252,20 @@ background-color: #110F21;
 }
 
 .sp_card_select {
-	width: 12.5rem;
-	height: 15.75rem;
+	width: 11.5rem;
+	height: 14.75rem;
 }
 
 .sp_card_select_img {
 width: 11.5rem;
+}
+
+.sp_card_select_img:hover {
+	filter: brightness(150%) drop-shadow(0px 0px 1px #ffffff) drop-shadow(0px 0px 1px #ffffff);
+}
+
+.sp_card_select_img:active {
+	filter: brightness(200%);
 }
 
 /* Category Tabs */
@@ -184,51 +275,167 @@ width: 11.5rem;
 }
 
 .sp_category {
-	background-color: #47586C;
-	height: 5rem;
-	width: 4rem;
+	border-radius: 0rem 1rem 1rem 0rem;
+	margin-right: "";
+	transition: all 0.3s ease;
+}
+
+.sp_category:hover {
+filter: brightness(125%);	
+}
+
+.sp_category:active {
+	filter: brightness(175%);
 }
 
 .sp_tab_c {
+		background-color: #47586C; /* #110F21 when active*/
 	background-image: url("img/tab_icons/tab_c_00.png");
 	background-repeat: no-repeat;
+	padding: 2.5rem 2rem;
+	flex-shrink: 0;
 }
-
-.sp_tab_c:hover {
-	filter: brightness(125%);
-}
-
-.sp_tab_c:active {
-	filter: brightness(125%);
-}
-
-/*.sp_tab_c:focus {
-	background-image: url("img/tab_icons/tab_c_01.png");
-}*/
 
 .sp_tab_cr {
+		background-color: #47586C; /* #110F21 when active*/
 	background-image: url("img/tab_icons/tab_cr_00.png");
 	background-repeat: no-repeat;
-}
-
-.sp_tab_cr:hover {
-	filter: brightness(125%);
+	padding: 2.5rem 2rem;
 }
 
 .sp_tab_h {
+		background-color: #47586C; /* #110F21 when active*/
 	background-image: url("img/tab_icons/tab_h_00.png");
 	background-repeat: no-repeat;
-}
-
-.sp_tab_h:hover {
-	filter: brightness(125%);
+		padding: 2.5rem 2rem;
 }
 
 .sp_tab_s {
+		background-color: #47586C; /* #110F21 when active*/
 	background-image: url("img/tab_icons/tab_s_00.png");
 	background-repeat: no-repeat;
+		padding: 2.5rem 2rem;
 }
 
-.sp_tab_s:hover {
+.sp_tab_c:hover, .sp_tab_cr:hover, .sp_tab_h:hover, .sp_tab_s:hover, {
 	filter: brightness(125%);
+}
+
+/* Media Queries */
+@media (max-width: 414px) {
+.sp_nav_divider {
+	flex-direction: column;
+	margin: 0rem 2rem;
+}
+
+.sp_title {
+	display: inline;
+	transform: translateY(0.5rem)
+}
+
+/* Main Container */
+.sp_main_container {
+flex-direction: column;
+gap: 0.1rem;
+border-radius: 2rem 2rem 2rem 0rem;
+}
+
+/* Navigation */
+.sp_nav_container {
+	flex-direction: row;
+	gap: 0.25rem;
+	justify-content: center;
+}
+
+.sp_nav {
+	margin: 0.5rem;
+}
+
+.sp_nav_music {
+	padding: 0.25rem 0rem;
+}
+
+/* Main Card */
+.sp_card_main {
+	margin: 0.25rem;
+}
+
+.sp_card_main_img {
+ width: 15rem;
+ margin-top: 1rem;
+}
+
+/* Description + Page Controller */
+#sp_desc_container {
+	margin: 0.5rem;
+	gap: 0rem;
+	flex-direction: column;
+}
+
+#sp_info {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		margin: 0rem;
+		width: 20.75rem;
+		height: 16rem;
+		text-align: center;
+}
+
+.sp_info_mobile {
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+}
+
+#icon_disp {
+	display: flex;
+	width: 8rem;
+}
+
+#CD_N, #CD_C {
+			margin: 0.25rem;
+					margin-top: 0.5rem;
+}
+
+.sp_page_ctrl {
+		display: none;
+}
+
+.sp_page_ctrl_mobile {
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		gap: 0rem;
+		color: white;
+}
+
+/* Card Select Grid */
+.sp_card_grid_container {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+	margin: 0.2rem;
+	padding: 0.2rem;
+}
+
+.sp_card_select {
+	width: 6.25rem;
+	height: 9.5rem;
+}
+
+.sp_card_select_img {
+width: 6.25rem;
+}
+
+.sp_category_container {
+	display: flex;
+	flex-direction: row;
+}
+
+.sp_category {
+	border-radius: 0rem 0rem 1rem 1rem;
+	margin-right: "";
+}
+
 }
