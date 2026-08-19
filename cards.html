@@ -6,44 +6,69 @@
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <!-- Base Style Link -->
 <link href="style.css" rel="stylesheet">
-<!-- Title --> <title>Sporepedia Prototype</title>
+<!-- Title -->
+<title>Sporepedia Prototype</title>
 </head>
-<body onload="bootup();tabSkip();selectUpdate()">
-<!-- Web Title --> <header class="sp_title"><h1>SPOREPEDIA</h1></header>
+<body onload="bootup();tabSkip();selectUpdate();screenCheck()">
+<!-- Web Title -->
+<header class="sp_title"><h1>SPOREPEDIA</h1></header>
 <div class="sp_nav_divider">
-<!-- Navigation --> <nav class="sp_nav_container">
-<a class="sp_nav" href="index.html">Home</a>
-<a class="sp_nav" href="#">*Sporepedia</a>
-<a class="sp_nav" href="credits.html">Credits</a>
-<button onclick="play()">Music Player</button>
-<button onclick="pause()">Music Stopper</button>
+<!-- Navigation -->
+<nav class="sp_nav_container">
+<a class="sp_nav" href="index.html"><img src="img/tab_icons/tab_home.png"></a>
+<button class="sp_nav_music" onclick="play()">Music Player</button>
+<button class="sp_nav_music" onclick="pause()">Music Stopper</button>
 </nav>
 <main class="sp_main_container"> <!-- Everything here will be organized horizontally-->
-<!-- Main Card --><section class="sp_card_main">
-<img src="" id="card_display" class="sp_card_main_img">
-</section>
-<!-- Description/Page --><section>
-<div id="sp_desc_container"> <!-- Make this section be sorted vertically-->
-<!-- Card Information --> <article id="sp_info">
-<!-- Creature Name --><h2 id="CD_N"></h2>
-<!-- Creature Description --><p id="CD_C"></p>
-</article>
-<!-- Page Controller --> <div class="sp_page_ctrl">
+<!-- This duplicate will appear on mobile, while the other gets hidden -->
+<div class="sp_page_ctrl_mobile">
 <div>
-<button id="page_l" onclick="pageLeft();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
+<button onclick="pageLeft();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
 </div>
-<div class="sp_page_ctrl">
-<p id="c_page">...</p>
+<div class="sp_page_number">
+<p id="c_page_m">1</p>
 <p>/</p>
 <p>6</p>
 </div>
 <div>
-<button id="page_r" onclick="pageRight();selectUpdate();killThatRow()"><img src="img/menu_arrow.png"></button>
+<button onclick="pageRight();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_forward"></button>
+</div>
+</div>
+<!-- Main Card -->
+<section class="sp_card_main">
+<img src="" id="card_display" class="sp_card_main_img">
+</section>
+<!-- Description/Page -->
+<section>
+<div id="sp_desc_container"> <!-- Make this section be sorted vertically-->
+<!-- Card Information -->
+<article id="sp_info">
+<!-- Creature Name -->
+<div class="sp_info_mobile">
+<h2 id="CD_N"></h2>
+<img src="" id="icon_disp"></img>
+</div>
+<!-- Creature Description -->
+<p id="CD_C"></p>
+</article>
+<!-- Page Controller -->
+<div class="sp_page_ctrl">
+<div>
+<button onclick="pageLeft();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
+</div>
+<div class="sp_page_number">
+<p id="c_page">1</p>
+<p>/</p>
+<p>6</p>
+</div>
+<div>
+<button onclick="pageRight();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_forward"></button>
 </div>
 </div>
 </div>
 </section>
-<!-- Card Selection Grid --><section class="sp_card_grid_container" id="grid_container"> <!-- This container is vertical -->
+<!-- Card Selection Grid -->
+<section class="sp_card_grid_container" id="grid_container"> <!-- This container is vertical -->
 <div class="sp_card_grid_row"> <!-- Each row is horizontal -->
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(1);displayUpdate();descUpdate()"><img id="SC_01" src="" class="sp_card_select_img" value="1" loading="lazy"></input>
 <button class="sp_card_select sp_card_select_bg" onclick="cardSelect(2);displayUpdate();descUpdate()"><img  id="SC_02" src="" class="sp_card_select_img"  value="2" loading="lazy"></button>
@@ -61,21 +86,31 @@
 </div>
 </section>
 </main>
-<!-- Category Tabs --><nav class="sp_category_container"> <!-- This section should be sorted vertically -->
-<!-- Cell tab --><button class="sp_category sp_tab_c" id="tab_cel" onclick="tabSkip(1);selectUpdate()"></button>
-<!-- Creature tab --> <button class="sp_category sp_tab_cr" id="tab_cre" onclick="tabSkip(2);selectUpdate()"></button>
-<!-- Building tab --> <button class="sp_category sp_tab_h" id="tab_hou" onclick="tabSkip(3);selectUpdate()"></button>
-<!-- Ship tab --><button class="sp_category sp_tab_s" id="tab_spa" onclick="tabSkip(4);selectUpdate()"></button>
+<!-- Category Tabs -->
+<nav class="sp_category_container"> <!-- This section should be sorted vertically -->
+	<!-- Cell tab -->
+	<div class="sp_tab_solo">
+	<button class="sp_category sp_tab_c" id="tab_cel" onclick="tabSkip(1);selectUpdate();cardJiggle(1)"></button>
+	</div>
+	<!-- Creature tab -->
+	<div class="sp_tab_solo">
+	<button class="sp_category sp_tab_cr" id="tab_cre" onclick="tabSkip(2);selectUpdate();cardJiggle(2)"></button>
+	</div>
+	<!-- Building tab -->
+	<div class="sp_tab_solo">
+	<button class="sp_category sp_tab_h" id="tab_hou" onclick="tabSkip(3);selectUpdate();cardJiggle(3)"></button>
+	</div>
+	<!-- Ship tab -->
+	<div class="sp_tab_solo">
+	<button class="sp_category sp_tab_s" id="tab_spa" onclick="tabSkip(4);selectUpdate()"></button>
+	</div>
 </nav>
 </div>
 </body>
 <!-- Footer -->
 <footer>
-<div class="debugging">
-<p>((DEBUGGING INFORMATION))</p><p>Card Selected:</p> <p id="db_S_C"></p> <p>| Card Display Value:</p> <p id="db_D"></p><p>Music Value:</p><p id="music-on"></p><p>Current Tab:</p><p id="db_tab"></p><p>Filepath values</p><p id="db_cat_ass"></p>
-</div>
+<p>>:(</p>
 </footer>
-</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <!-- Hey hackers, because it's a prototype, I wanted all the scripts to be contained in this .html file.
 When I begin converting it into something else, I'll be relocating this into the proper file.
@@ -113,14 +148,13 @@ var Display; //Big Card Display Value
 // (Card Information)
 var charName_Input = document.getElementById("CD_N"); //Name of Selected Creature (source)
 var charName; //Name of Selected Creature
-var charCredit_Input = document.getElementById("CD_C") //Creators of Selected Creature (source)
+var charCredit_Input = document.getElementById("CD_C"); //Creators of Selected Creature (source)
 var charCredit; //Creators of Selected Creature
+var charIcon = document.getElementById("icon_disp"); //Icon to show in description box
 
 // (Pages)
 var C_Page = document.getElementById("c_page"); //current page display (source)
 var C_Page_V; //adjustable page value
-var Page_R = document.getElementById("page_r"); //useless id
-var Page_L = document.getElementById("page_l"); //useless id
 var Page_Desc = document.getElementById("sp_info"); // Creature Name + Description
 
 //(Card Selectors)
@@ -142,108 +176,179 @@ var T_Ce = document.getElementById("tab_cel"); // cell tab source
 var T_Cr = document.getElementById("tab_cre"); // creature tab source
 var T_Ho = document.getElementById("tab_hou"); // house tab source
 var T_Sp = document.getElementById("tab_spa"); // space tab source
+var Jiggle; //Cards do a dance when tabs get pressed;
 
-// (Debug)
-var db_S_C = document.getElementById("db_S_C"); //debug select indicator (source)
-var db_Display = document.getElementById("db_D"); //debug big card value
-var db_Cat_Assemble = document.getElementById("db_cat_ass"); // Debug filepath assembler
+// (Responsive Design)
+var ScreenW_Desktop = 1080;
+var ScreenW_Mobile = 414;
+var T_pad; //padding config for normal tabs
+var T_C_pad; //padding config for selected tabs
+var E_pad; //padding config for grid container;
+var E_r_pad; //padding config for a reduced grid container;
+var P_D_hi; //page description height
+var P_D_hi_a; //page description hidden height
+var C_Page_M = document.getElementById("c_page_m"); //mobile page thing, it's cosmetic!
 
 //[[Scripts]]
 // (On-load)
 function bootup() {
 audio_flg = 0;
 S_C = 0;
-C_Page_V = "1";
+C_Page_V = 1;
 Display = 0;
 M_C.src = "img/card_main/debug-slug.png";
 C_Cat = 0;
 C_N = 0;
 C_I = 0;
-db_S_C.textContent = S_C;
 C_Page.textContent = C_Page_V;
-db_D.textContent = Display;
+C_Page_M.textContent = C_Page_V;
+Jiggle = 0;
+}
+
+//(Responsive Check - Check screen size before then changing certain style functions)
+function screenCheck() {
+if (window.innerWidth <= ScreenW_Mobile) {
+T_pad = "2rem 2rem";
+T_C_pad = "2.5rem 2rem";
+E_pad = "0rem";
+E_r_pad = "2.22rem 0rem";
+P_D_hi = "16rem";
+P_D_hi_a = "0rem";
+Page_Desc.style.height = P_D_hi_a;
+} else {
+T_pad = "2.5rem 2rem";
+T_C_pad = "2.5rem 2.5rem";
+E_pad = "1rem";
+E_r_pad = "8.88rem 1rem";
+P_D_hi = "19rem";
+P_D_hi_a = "19rem";
+Page_Desc.style.height = P_D_hi_a;
+}
 }
 
 // ((Page Scripts)
 // (Page Previous)
 function pageLeft() {
+Page_Desc.style.height = P_D_hi_a;
 Page_Desc.style.visibility = "hidden";
 C_Page_V = C_Page_V - 1;
 M_C.src = "img/card_main/debug-slug.png";
 S_C = 0;
-db_S_C.textContent = S_C;
 if (C_Page_V == 0) {
 C_Page_V = 6
 }
 C_Page.textContent = C_Page_V;
+C_Page_M.textContent = C_Page_V;
 }
 
 // (Page Next)
 function pageRight() {
+Page_Desc.style.height = P_D_hi_a;
 Page_Desc.style.visibility = "hidden";
 C_Page_V = C_Page_V + 1;
 M_C.src = "img/card_main/debug-slug.png";
 S_C = 0;
-db_S_C.textContent = S_C;
 if (C_Page_V == 7) { //Cells only have 1 page of content
 C_Page_V = 1;
 }
 C_Page.textContent = C_Page_V;
+C_Page_M.textContent = C_Page_V;
 }
 
 // ((Tab-Icon script))
 function tabSkip(num) { //By default on load, name + description will be hidden
 C_Page_V = 1;
 C_Page.textContent = C_Page_V;
+C_Page_M.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png";
 charCredit_Input.textContent = "";
 if (num == '1') { //Cell Icon Anim + Page Reset + Tab State 
 C_Page_V = 1; // Skip to page where Cells first appear
 C_Page.textContent = C_Page_V;
+C_Page_M.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_01.png')"; // Cell is on, everything Off
+T_Ce.style.padding = T_C_pad;
+T_Ce.style.backgroundColor = "#110F21";
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
+T_Cr.style.padding = T_pad;
+T_Cr.style.backgroundColor = "#47586C";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
+T_Ho.style.padding = T_pad;
+T_Ho.style.backgroundColor = "#47586C";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
+T_Sp.style.padding = T_pad;
+T_Sp.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
-Exp.style.padding = "0rem";
 Page_Desc.style.visibility = "hidden";
+Page_Desc.style.height = P_D_hi_a;
+Exp.style.padding = E_pad;
 }
 if (num == '2') { //Creature Icon Anim + Page Reset + Tab State 
 C_Page_V = 1; // Reset Current Page Value
 C_Page.textContent = C_Page_V;
+C_Page_M.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_01.png')"; // Creature is on, everything Off
+T_Cr.style.padding = T_C_pad;
+T_Cr.style.backgroundColor = "#110F21";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
+T_Ho.style.padding = T_pad;
+T_Ho.style.backgroundColor = "#47586C";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
+T_Sp.style.padding = T_pad;
+T_Sp.style.backgroundColor = "#47586C";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
+T_Ce.style.padding = T_pad;
+T_Ce.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
-Exp.style.padding = "0rem";
 Page_Desc.style.visibility = "hidden";
+Page_Desc.style.height = P_D_hi_a;
+Exp.style.padding = E_pad;
 }
 if (num == '3') { //Building Icon Anim + Page Reset + Tab State 
 C_Page_V = 4; // Reset Current Page Value
 C_Page.textContent = C_Page_V;
+C_Page_M.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_01.png')"; // House is on, everything Off
+T_Ho.style.padding = T_C_pad;
+T_Ho.style.backgroundColor = "#110F21";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
+T_Ce.style.padding = T_pad;
+T_Ce.style.backgroundColor = "#47586C";
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
+T_Cr.style.padding = T_pad;
+T_Cr.style.backgroundColor = "#47586C";
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_00.png')";
+T_Sp.style.padding = T_pad;
+T_Sp.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
-Exp.style.padding = "0rem";
 Page_Desc.style.visibility = "hidden";
+Page_Desc.style.height = P_D_hi_a;
+Exp.style.padding = E_pad;
 }
 if (num == '4') { //Space Icon Anim + Page Reset + Tab State 
 C_Page_V = 5; // Reset Current Page Value
 C_Page.textContent = C_Page_V; // Blank Description
+C_Page_M.textContent = C_Page_V;
 M_C.src = "img/card_main/debug-slug.png"; // Reset Big Card Preview
 T_Sp.style.backgroundImage = "url('img/tab_icons/tab_s_01.png')"; // Space is on, everything Off
+T_Sp.style.padding = T_C_pad;
+T_Sp.style.backgroundColor = "#110F21";
 T_Cr.style.backgroundImage = "url('img/tab_icons/tab_cr_00.png')";
+T_Cr.style.padding = T_pad;
+T_Cr.style.backgroundColor = "#47586C";
 T_Ce.style.backgroundImage = "url('img/tab_icons/tab_c_00.png')";
+T_Ce.style.padding = T_pad;
+T_Ce.style.backgroundColor = "#47586C";
 T_Ho.style.backgroundImage = "url('img/tab_icons/tab_h_00.png')";
+T_Ho.style.padding = T_pad;
+T_Ho.style.backgroundColor = "#47586C";
 KTR.style.display = "flex";
-Exp.style.padding = "0rem";
 Page_Desc.style.visibility = "hidden";
+Page_Desc.style.height = P_D_hi_a;
+Exp.style.padding = E_pad;
 }
 }
 
@@ -251,33 +356,40 @@ Page_Desc.style.visibility = "hidden";
 function cardSelect(num) {
 if (num == '1') {
 S_C = 1;
+charIcon.src = SC_01.src;
 }
 if (num == '2') {
 S_C = 2;
+charIcon.src = SC_02.src;
 }
 if (num == '3') {
 S_C = 3;
+charIcon.src = SC_03.src;
 }
 if (num == '4') {
 S_C = 4;
+charIcon.src = SC_04.src;
 }
 if (num == '5') {
 S_C = 5;
+charIcon.src = SC_05.src;
 }
 if (num == '6') {
 S_C = 6;
+charIcon.src = SC_06.src;
 }
 if (num == '7') {
 S_C = 7;
+charIcon.src = SC_07.src;
 }
 if (num == '8') {
 S_C = 8;
+charIcon.src = SC_08.src;
 }
 if (num == '9') {
 S_C = 9;
+charIcon.src = SC_09.src;
 }
-db_S_C.textContent = S_C;
-db_Cat_Assemble.textContent = C_Cat + C_N + C_I;
 }
 
 // (Display Update)
@@ -326,6 +438,7 @@ M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
 // ((Description Update Script))
 function descUpdate () {
 Page_Desc.style.visibility = "visible";
+Page_Desc.style.height = P_D_hi;
 if (C_Page_V == '1') {
 if (S_C <= 4) {
 charName_Input.innerHTML = "Nameless Cell";
@@ -340,7 +453,7 @@ charName_Input.innerHTML = "Nameless Creature";
 charCredit_Input.innerHTML = "Made by: zerbie" + "<br>" + "What was this one called again??" ;
 }
 }
-if (C_Page_V == '2' || '3' ) {
+if (C_Page_V == '2' || C_Page_V == '3' ) {
 charName_Input.innerHTML = "Nameless Creature";
 charCredit_Input.innerHTML = "Made by: zerbie" + "<br>" + "What was this one called again??" ;
 }
@@ -369,7 +482,7 @@ charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "I don't think you kno
 }
 if (S_C == 3) {
 charName_Input.innerHTML = "Green";
-charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "🤷" ;
+charCredit_Input.innerHTML = "Made by: Asgore" + "<br>" + "­Ъци" ;
 }
 if (S_C == 4) {
 charName_Input.innerHTML = "Orange";
@@ -543,10 +656,73 @@ S_C_BG[8].style.backgroundImage = "url('img/card_select/BG_S.jpg')";
 function killThatRow() {
 if (C_Page_V == '6') {
 KTR.style.display = "none";
-Exp.style.padding = "8.38rem 0rem";
+Exp.style.padding = E_r_pad;
 } else {
 KTR.style.display = "flex";
-Exp.style.padding = "0rem";
+Exp.style.padding = E_pad;
+}
+}
+
+function cardJiggle(num) {
+if (num == '1') {
+if (Jiggle == 0) {
+Jiggle = 1;
+S_C_BG[0].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[1].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[2].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[3].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+setTimeout (cardJiggleStop, 800, 1);
+}
+}
+if (num == '2') {
+if (Jiggle == 0) {
+Jiggle = 1;
+S_C_BG[4].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[5].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[6].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[7].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[8].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+setTimeout (cardJiggleStop, 800, 2);
+}
+}
+if (num == '3') {
+if (Jiggle == 0) {
+Jiggle = 1;
+S_C_BG[4].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[5].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[6].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[7].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+S_C_BG[8].style.animation='cardJiggle 1s ease 0s 1 normal forwards';
+setTimeout (cardJiggleStop, 800, 2);
+}
+}
+if (num == '4') {
+}
+}
+
+function cardJiggleStop(num) {
+if (num == '1'){
+S_C_BG[0].style.animation='';
+S_C_BG[1].style.animation='';
+S_C_BG[2].style.animation='';
+S_C_BG[3].style.animation='';
+Jiggle = 0;
+}
+if (num == '2'){
+S_C_BG[4].style.animation='';
+S_C_BG[5].style.animation='';
+S_C_BG[6].style.animation='';
+S_C_BG[7].style.animation='';
+S_C_BG[8].style.animation='';
+Jiggle = 0;
+}
+if (num == '3'){
+S_C_BG[4].style.animation='';
+S_C_BG[5].style.animation='';
+S_C_BG[6].style.animation='';
+S_C_BG[7].style.animation='';
+S_C_BG[8].style.animation='';
+Jiggle = 0;
 }
 }
 </script>
