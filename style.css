@@ -599,7 +599,7 @@ width: 6.25rem;
 }
 
 }
-@media (max-width: 384px) { /* 93% of previous length */
+@media (max-width: 375px) { /* 93% of previous length */
 .sp_nav_divider {
 	flex-direction: column;
 	margin: 0rem 1.64rem;
