@@ -194,7 +194,7 @@ background-color: #110F21;
 	flex-direction: column;
 	gap: 1rem;
 	margin: 1rem;
-	padding: 1rem;
+	padding: "";
 }
 .sp_card_grid_row {
 	display: flex;
@@ -421,7 +421,7 @@ border-radius: 2rem 2rem 2rem 0rem;
 	flex-direction: column;
 	gap: 1rem;
 	margin: 1rem;
-	padding: 2rem;
+	padding: "";
 }
 
 .sp_card_select {
@@ -556,7 +556,7 @@ border-radius: 2rem 2rem 2rem 0rem;
 	flex-direction: column;
 	gap: 1rem;
 	margin: 0.2rem;
-	padding: 0.2rem;
+	padding: "";
 }
 
 .sp_card_select {
