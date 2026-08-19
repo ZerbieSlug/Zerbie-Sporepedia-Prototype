@@ -23,7 +23,7 @@
 <!-- This duplicate will appear on mobile, while the other gets hidden -->
 <div class="sp_page_ctrl_mobile">
 <div>
-<button onclick="pageLeft();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
+<button onclick="pageLeft();selectUpdate();killThatRow();screenCheck()"><img src="img/menu_arrow.png" class="sp_page_reverse"</button>
 </div>
 <div class="sp_page_number">
 <p id="c_page_m">1</p>
@@ -31,7 +31,7 @@
 <p>6</p>
 </div>
 <div>
-<button onclick="pageRight();selectUpdate();killThatRow()"><img src="img/menu_arrow.png" class="sp_page_forward"></button>
+<button onclick="pageRight();selectUpdate();killThatRow();screenCheck()"><img src="img/menu_arrow.png" class="sp_page_forward"></button>
 </div>
 </div>
 <!-- Main Card -->
@@ -218,14 +218,14 @@ Page_Desc.style.height = P_D_hi_a;
 }
 if (window.innerWidth >= ScreenW_Mobile_S && window.innerWidth <= ScreenW_Desktop) {
 T_pad = "4rem 4rem";
-T_C_pad = "12rem 4rem";
-E_pad = "2rem";
-E_r_pad = "8.88rem 1rem";
+T_C_pad = "6rem 4.5rem";
+E_pad = "3rem";
+E_r_pad = "4.44rem 0rem";
 P_D_hi = "19rem";
 P_D_hi_a = "0px";
 Page_Desc.style.height = P_D_hi_a;
 }
-if (window.innerWidth = ScreenW_Desktop){
+if (window.innerWidth >= ScreenW_Desktop){
 T_pad = "2.5rem 2rem";
 T_C_pad = "2.5rem 2.5rem";
 E_pad = "1rem";
@@ -240,11 +240,13 @@ Page_Desc.style.height = P_D_hi_a;
 // (Page Previous)
 function pageLeft() {
 if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.height = P_D_hi_a;
 Page_Desc.style.display = "none";
 } else {
 Page_Desc.style.height = P_D_hi_a;
-}
+Page_Desc.style.display = "flex";
 Page_Desc.style.visibility = "hidden";
+}
 C_Page_V = C_Page_V - 1;
 M_C.src = "img/card_main/debug-slug.png";
 S_C = 0;
@@ -258,11 +260,13 @@ C_Page_M.textContent = C_Page_V;
 // (Page Next)
 function pageRight() {
 if (window.innerWidth < ScreenW_Desktop){
+Page_Desc.style.height = P_D_hi_a;
 Page_Desc.style.display = "none";
 } else {
 Page_Desc.style.height = P_D_hi_a;
-}
+Page_Desc.style.display = "flex";
 Page_Desc.style.visibility = "hidden";
+}
 C_Page_V = C_Page_V + 1;
 M_C.src = "img/card_main/debug-slug.png";
 S_C = 0;
@@ -466,13 +470,15 @@ M_C.src = "img/card_main/" + C_Cat + "/" + C_N + "0" + Display + ".jpg";
 }
 
 // ((Description Update Script))
-function descUpdate () {
+function descUpdate() {
 if (window.innerWidth < ScreenW_Desktop){
 Page_Desc.style.display = "flex";
-Page_Desc.style.height = P_D_hi_a;
+Page_Desc.style.visibility = "visible";
+Page_Desc.style.height = P_D_hi;
 } else {
 Page_Desc.style.visibility = "visible";
 Page_Desc.style.height = P_D_hi_a;
+Page_Desc.style.display = "flex";
 }
 if (C_Page_V == '1') {
 if (S_C <= 4) {
