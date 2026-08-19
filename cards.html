@@ -181,6 +181,7 @@ var Jiggle; //Cards do a dance when tabs get pressed;
 // (Responsive Design)
 var ScreenW_Desktop = 1920;
 var ScreenW_Mobile_S = 414;
+var ScreenW_Mobile_xS = 384;
 var T_pad; //padding config for normal tabs
 var T_C_pad; //padding config for selected tabs
 var E_pad; //padding config for grid container;
@@ -207,7 +208,15 @@ Jiggle = 0;
 
 //(Responsive Check - Check screen size before then changing certain style functions)
 function screenCheck() {
-if (window.innerWidth <= ScreenW_Mobile_S) {
+if (window.innerWidth <= ScreenW_Mobile_xS) {
+T_pad = "2rem 2rem";
+T_C_pad = "2.5rem 2rem";
+E_pad = "0rem";
+E_r_pad = "2.06rem 0rem";
+P_D_hi = "14.88rem";
+P_D_hi_a = "0px";
+}
+if (window.innerWidth <= ScreenW_Mobile_S && window.innerWidth > ScreenW_Mobile_xS) {
 T_pad = "2rem 2rem";
 T_C_pad = "2.5rem 2rem";
 E_pad = "0rem";
